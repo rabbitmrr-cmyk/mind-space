@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title id="title">色で選ぶ5分の詩リセット — Mind Space</title>
-  <meta name="description" id="desc" content="RGBカラーパレットから色（ムード）を選び、公有の詩を一篇。原文＋日本語/英語で静かに読む。"/>
+  <meta name="description" id="desc" content="RGBカラーパレットから色（ムード）を選び、世界の詩を一篇。原文＋日本語/英語で静かに読む。"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
@@ -14,15 +14,14 @@
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
   <header class="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between">
-    <a href="../index.html" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
+    <a href="/mind-space/" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
     <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
   </header>
 
   <main class="mx-auto max-w-4xl px-4 pb-16">
     <h1 class="text-2xl font-semibold" id="h1">色で選ぶ 5分の詩リセット</h1>
-    <p class="mt-2 text-slate-600" id="lead">下の<strong>RGBカラーパレット</strong>から色を選ぶと、公有の詩を一篇だけ。原文と日本語/英語で静かに読む時間を。</p>
+    <p class="mt-2 text-slate-600" id="lead">下の<strong>RGBカラーパレット</strong>から色を選ぶと、世界の詩を一篇だけ。原文と日本語/英語で静かに読む時間を。</p>
 
-    <!-- カラー選択 -->
     <section class="card p-5 mt-5">
       <div class="flex flex-col md:flex-row md:items-center gap-4">
         <label class="text-sm">
@@ -37,7 +36,7 @@
             <span class="dot" id="chip" style="background:#5FA8FF"></span>
             <code id="hex" class="text-xs text-slate-500">#5FA8FF</code>
           </div>
-          <div class="text-xs text-slate-500 mt-1" id="hint">青=さわやか / 緑=おだやか / 赤=情熱 / オレンジ=元気 / 紫=内省 / 黒=内省</div>
+          <div class="text-xs text-slate-500 mt-1" id="hint">青=さわやか / 緑=おだやか / 赤=情熱 / オレンジ=元気 / 紫・黒=内省</div>
         </div>
 
         <div class="md:ml-auto">
@@ -46,7 +45,6 @@
       </div>
     </section>
 
-    <!-- 詩の表示 -->
     <section class="card p-6 mt-6">
       <div class="flex items-center justify-between gap-3">
         <div>
@@ -65,22 +63,23 @@
     </section>
 
     <p class="mt-4 text-xs text-slate-500">
-      ※ 原文はいずれも著作権の保護期間が満了した<strong>公有（パブリックドメイン）</strong>作品です。訳文は本ページ用に作成した簡易訳（CC0相当）です。
+      ※ 原文は<strong>パブリックドメイン</strong>から取得。訳は直訳優先（なければ表示しません）。出典リンクはカード上部に表示します。
     </p>
   </main>
 
   <script>
+    // i18n
     const dict={
-      ja:{title:"色で選ぶ5分の詩リセット — Mind Space",desc:"RGBカラーパレットから色（ムード）を選び、公有の詩を一篇。原文＋日本語/英語で静かに読む。",
+      ja:{title:"色で選ぶ5分の詩リセット — Mind Space",desc:"RGBカラーパレットから色（ムード）を選び、世界の詩を一篇。原文＋日本語/英語で静かに読む。",
           back:"ホームへ戻る",h1:"色で選ぶ 5分の詩リセット",
-          lead:"下のRGBカラーパレットから色を選ぶと、公有の詩を一篇だけ。原文と日本語/英語で静かに読む時間を。",
-          pick:"色を選ぶ（RGBパレット）",moodLabel:"推定ムード:",hint:"青=さわやか / 緑=おだやか / 赤=情熱 / オレンジ=元気 / 紫=内省 / 黒=内省",
+          lead:"下のRGBカラーパレットから色を選ぶと、世界の詩を一篇だけ。原文と日本語/英語で静かに読む時間を。",
+          pick:"色を選ぶ（RGBパレット）",moodLabel:"推定ムード:",hint:"青=さわやか / 緑=おだやか / 赤=情熱 / オレンジ=元気 / 紫・黒=内省",
           badge:"選ばれたムード",btnNew:"詩を表示",toggle:"English",
           moods:{fresh:"さわやか",calm:"おだやか",passion:"情熱",vital:"元気",reflect:"内省"}},
       en:{title:"Color-picked 5-minute poem reset — Mind Space",desc:"Pick a color from an RGB palette; get one public-domain poem—original + your language.",
           back:"Back to Home",h1:"5-minute poem reset by color",
           lead:"Choose a color from the RGB palette to receive one public-domain poem. Read quietly in original + English/Japanese.",
-          pick:"Pick a color (RGB palette)",moodLabel:"Estimated mood:",hint:"Blue=fresh / Green=calm / Red=passion / Orange=vital / Violet/Black=reflective",
+          pick:"Pick a color (RGB palette)",moodLabel:"Estimated mood:",hint:"Blue=fresh • Green=calm • Red=passion • Orange=vital • Violet/Black=reflective",
           badge:"Selected mood",btnNew:"Show poem",toggle:"日本語",
           moods:{fresh:"fresh",calm:"calm",passion:"passion",vital:"vital",reflect:"reflective"}}
     };
@@ -94,22 +93,17 @@
       document.documentElement.lang=uiLang;
     }
 
-    // 色→ムード（H, S, V すべて考慮）
+    // HSV変換
     function hexToHSV(hex){
       const c=hex.replace("#",""); const r=parseInt(c.slice(0,2),16)/255, g=parseInt(c.slice(2,4),16)/255, b=parseInt(c.slice(4,6),16)/255;
-      const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min;
-      let h=0;
+      const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min; let h=0;
       if(d!==0){ if(max===r) h=((g-b)/d)%6; else if(max===g) h=(b-r)/d+2; else h=(r-g)/d+4; h*=60; if(h<0) h+=360;}
-      const s=max===0?0:d/max; const v=max;
-      return {h,s,v};
+      const s=max===0?0:d/max; const v=max; return {h,s,v};
     }
-
     function hsvToMood({h,s,v}){
-      // 明るさ・彩度による特例
-      if(v<0.2) return "reflect";     // 暗い → 内省的
-      if(s<0.25) return "calm";       // 彩度が低い → おだやか
-      if(v>0.9 && s>0.4) return "fresh"; // とても明るい → さわやか
-      // 色相による分類
+      if(v<0.2) return "reflect";     // 暗い → 内省
+      if(s<0.25) return "calm";       // 低彩度 → おだやか
+      if(v>0.9 && s>0.4) return "fresh"; // 明るく澄んだ → さわやか
       if(h<25)  return "vital";
       if(h<50)  return "passion";
       if(h<160) return "calm";
@@ -117,62 +111,75 @@
       return "reflect";
     }
 
-    // 公有詩
-    const poems=[
-      { title:"古池や", author:"松尾芭蕉 (Matsuo Bashō, 1644–1694)", year:"1686",
-        mood:["fresh","calm","reflect"],
-        original:"古池や\n蛙飛びこむ\n水の音",
-        ja:"古い池に、蛙がぽちゃん。静けさのなかにひとつの音。",
-        en:"An ancient pond—\na frog jumps in;\nthe sound of water."
-      },
-      { title:"I wandered lonely as a Cloud (excerpt)", author:"William Wordsworth (1770–1850)", year:"1807",
-        mood:["fresh","vital"],
-        original:"I wandered lonely as a Cloud\nThat floats on high o'er Vales and Hills,\nWhen all at once I saw a crowd,\nA host, of golden Daffodils;",
-        ja:"雲のようにひとり歩いていた。突然、谷や丘の上に咲く金色の水仙の群れに出会う。",
-        en:"I wandered lonely as a cloud.\nAll at once I met a crowd—\na host of golden daffodils."
-      },
-      { title:"Chanson d’automne (excerpt)", author:"Paul Verlaine (1844–1896)", year:"1866",
-        mood:["reflect","calm","passion"],
-        original:"Les sanglots longs\nDes violons\nDe l’automne\nBlessent mon cœur\nD’une langueur\nMonotone.",
-        ja:"秋のヴァイオリンの長い嗚咽が、単調な倦怠で私の心をかすかに痛める。",
-        en:"The violins of autumn—long sobbing—\nwound my heart with a soft, monotonous languor."
-      },
-      { title:"Because I could not stop for Death — (excerpt)", author:"Emily Dickinson (1830–1886)", year:"c.1863",
-        mood:["reflect"],
-        original:"Because I could not stop for Death –\nHe kindly stopped for me –\nThe Carriage held but just Ourselves –\nAnd Immortality.",
-        ja:"わたしが死に立ち止まれないので、死の方がやさしく止まってくれた。馬車には、わたしたちと“不滅”だけが乗っていた。",
-        en:"Because I could not stop for Death—\nHe kindly stopped for me;\nThe carriage held but just ourselves\nAnd Immortality."
-      }
-    ];
-    function pickPoemByMood(mood){
-      const cand=poems.filter(p=>p.mood.includes(mood));
-      return cand[Math.floor(Math.random()*cand.length)];
-    }
-
-    // 状態管理
+    // 状態
+    const WORKER_BASE = "https://floral-fire-c472.rabbitmrr.workers.dev";
+    const ALLOW_HOSTS = ["en.wikisource.org","ja.wikisource.org","fr.wikisource.org","zh.wikisource.org","poetrydb.org","www.gutenberg.org"];
     let currentMood="fresh", currentPoem=null, showOriginal=true;
-    function render(poem, displayLang){
-      const moods=dict[displayLang].moods;
-      $("poemTitle").textContent = poem.title;
-      $("poemMeta").textContent = `${poem.author} · ${poem.year}`;
-      $("orig").textContent = poem.original;
-      $("tran").textContent = displayLang==="ja" ? poem.ja : poem.en;
-      $("badge").textContent = (displayLang==="ja"?"選ばれたムード: ":"Selected mood: ") + moods[currentMood];
-    }
+
     function updateMoodUI(hex){
       $("chip").style.background = hex; $("hex").textContent = hex.toUpperCase();
       const hsv = hexToHSV(hex); currentMood = hsvToMood(hsv);
-      const label = dict[uiLang].moods[currentMood];
-      $("moodText").textContent = label;
+      $("moodText").textContent = dict[uiLang].moods[currentMood];
+    }
+
+    function withTimeout(promise, ms=5000){
+      const to = new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")), ms));
+      return Promise.race([promise, to]);
+    }
+
+    async function getOnlinePoem(mood, uiLang){
+      const url = `${WORKER_BASE}/api/poem?mood=${encodeURIComponent(mood)}&lang=${encodeURIComponent(uiLang)}`;
+      const res = await withTimeout(fetch(url, {headers:{"accept":"application/json"}}), 5000);
+      if(!res.ok) throw new Error("net");
+      const j = await res.json();
+      if(!j.ok || !j.poem) throw new Error("notfound");
+      const p = j.poem;
+      try{
+        const host = new URL(p.source_url).host;
+        if(!ALLOW_HOSTS.includes(host)) throw new Error("host");
+      }catch{ throw new Error("host"); }
+      return p;
+    }
+
+    async function getLocalPoem(mood, uiLang){
+      const res = await fetch("./poems.json", {cache:"no-store"});
+      const arr = await res.json();
+      const cand = arr.filter(x => (x.mood || []).includes(mood));
+      const pick = cand.length ? cand[Math.floor(Math.random()*cand.length)] : arr[Math.floor(Math.random()*arr.length)];
+      return {
+        title: pick.title, author: pick.author,
+        original: pick.original, translation: (uiLang==="ja" ? pick.ja : pick.en) || null,
+        source_url: pick.source_url || ""
+      };
+    }
+
+    async function loadPoem(mood, uiLang){
+      $("poemTitle").textContent = uiLang==="ja" ? "検索中…" : "Searching…";
+      $("poemMeta").textContent = "";
+      $("orig").textContent = ""; $("tran").textContent = "";
+      try{
+        const p = await getOnlinePoem(mood, uiLang);
+        $("poemTitle").textContent = p.title;
+        $("poemMeta").innerHTML = `${p.author} · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>`;
+        $("orig").textContent = p.original;
+        $("tran").textContent = p.translation || "";
+      }catch(_e){
+        const p = await getLocalPoem(mood, uiLang);
+        $("poemTitle").textContent = p.title + (uiLang==="ja" ? "（ローカル）" : " (local)");
+        $("poemMeta").innerHTML = `${p.author}` + (p.source_url ? ` · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>` : "");
+        $("orig").textContent = p.original;
+        $("tran").textContent = p.translation || "";
+      }finally{
+        $("badge").textContent = (uiLang==="ja"?"選ばれたムード: ":"Selected mood: ") + dict[uiLang].moods[currentMood];
+      }
     }
 
     // 初期化
     applyUI();
     updateMoodUI($("picker").value);
-    $("btnNew").addEventListener("click", ()=>{
-      currentPoem = pickPoemByMood(currentMood);
-      render(currentPoem, uiLang);
-    });
+
+    // イベント
+    $("btnNew").addEventListener("click", ()=>{ loadPoem(currentMood, uiLang); });
     $("picker").addEventListener("input", e=>{ updateMoodUI(e.target.value); });
     $("toggleLang").addEventListener("click", ()=>{
       showOriginal = !showOriginal;
@@ -182,7 +189,6 @@
     $("lang").addEventListener("click", ()=>{
       uiLang = (uiLang==="ja"?"en":"ja");
       applyUI();
-      if(currentPoem) render(currentPoem, uiLang);
       $("moodText").textContent = dict[uiLang].moods[currentMood];
     });
   </script>

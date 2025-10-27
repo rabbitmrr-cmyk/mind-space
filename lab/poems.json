@@ -1,0 +1,92 @@
+[
+  {
+    "title": "古池や",
+    "author": "松尾芭蕉 (1644–1694)",
+    "mood": ["fresh","calm","reflect"],
+    "original": "古池や\n蛙飛びこむ\n水の音",
+    "ja": "古い池に、蛙がぽちゃん。静けさのなかにひとつの音。",
+    "en": "An ancient pond—\na frog jumps in;\nthe sound of water.",
+    "source_url": "https://ja.wikisource.org/wiki/%E5%8F%A4%E6%B1%A0%E3%82%84"
+  },
+  {
+    "title": "I wandered lonely as a Cloud (excerpt)",
+    "author": "William Wordsworth (1770–1850)",
+    "mood": ["fresh","vital"],
+    "original": "I wandered lonely as a Cloud\nThat floats on high o'er Vales and Hills,\nWhen all at once I saw a crowd,\nA host, of golden Daffodils;",
+    "ja": "雲のようにひとり歩いていた。突然、谷や丘の上に咲く金色の水仙の群れに出会う。",
+    "en": "I wandered lonely as a cloud.\nAll at once I met a crowd—\na host of golden daffodils.",
+    "source_url": "https://en.wikisource.org/wiki/I_Wandered_Lonely_as_a_Cloud"
+  },
+  {
+    "title": "Chanson d’automne (excerpt)",
+    "author": "Paul Verlaine (1844–1896)",
+    "mood": ["reflect","calm","passion"],
+    "original": "Les sanglots longs\nDes violons\nDe l’automne\nBlessent mon cœur\nD’une langueur\nMonotone.",
+    "ja": "秋のヴァイオリンの長い嗚咽が、単調な倦怠で私の心をかすかに痛める。",
+    "en": "The violins of autumn—long sobbing—\nwound my heart with a soft, monotonous languor.",
+    "source_url": "https://fr.wikisource.org/wiki/Po%C3%A8mes_saturniens/Chanson_d%E2%80%99automne"
+  },
+  {
+    "title": "Because I could not stop for Death — (excerpt)",
+    "author": "Emily Dickinson (1830–1886)",
+    "mood": ["reflect"],
+    "original": "Because I could not stop for Death –\nHe kindly stopped for me –\nThe Carriage held but just Ourselves –\nAnd Immortality.",
+    "ja": "わたしが死に立ち止まれないので、死の方がやさしく止まってくれた。馬車には、わたしたちと“不滅”だけが乗っていた。",
+    "en": "Because I could not stop for Death—\nHe kindly stopped for me;\nThe carriage held but just ourselves\nAnd Immortality.",
+    "source_url": "https://en.wikisource.org/wiki/Because_I_could_not_stop_for_Death"
+  },
+  {
+    "title": "静夜思",
+    "author": "李白 (701–762)",
+    "mood": ["reflect","calm"],
+    "original": "床前明月光 疑是地上霜\n举头望明月 低头思故乡",
+    "ja": "寝床の前の月光は、地面の霜のよう。頭を上げて月を見、うつむいて故郷を思う。",
+    "en": "Moonlight before my bed—\nI thought it was frost on the ground.\nI lift my head to the bright moon,\nthen lower it, thinking of home.",
+    "source_url": "https://zh.wikisource.org/"
+  },
+  {
+    "title": "A Red, Red Rose (excerpt)",
+    "author": "Robert Burns (1759–1796)",
+    "mood": ["passion","vital"],
+    "original": "O my Luve's like a red, red rose\nThat's newly sprung in June;",
+    "ja": "きみへの愛は真紅のバラのよう、六月に咲いたばかりの。",
+    "en": "O my Luve’s like a red, red rose\nThat’s newly sprung in June;",
+    "source_url": "https://en.wikisource.org/wiki/A_Red,_Red_Rose"
+  },
+  {
+    "title": "春望（杜甫）",
+    "author": "杜甫 (712–770)",
+    "mood": ["reflect","fresh"],
+    "original": "國破山河在 城春草木深\n感時花濺涙 恨別鳥驚心",
+    "ja": "国は敗れても山河は在り、春の城に草木深し。世の有様を思って花に涙、別れを恨み鳥にもこころ驚く。",
+    "en": "The nation shattered, mountains and rivers remain.\nSpring in the city—grasses and trees grow deep.\nMoved by the times, flowers shed tears;\nHating separation, birds startle the heart.",
+    "source_url": "https://zh.wikisource.org/"
+  },
+  {
+    "title": "Stopping by Woods on a Snowy Evening (excerpt)",
+    "author": "Robert Frost (1874–1963)",
+    "mood": ["calm","reflect"],
+    "original": "Whose woods these are I think I know.\nHis house is in the village though;\nHe will not see me stopping here\nTo watch his woods fill up with snow.",
+    "ja": "だれの森か、たぶん知っている。彼の家は村の中。私がここで立ち止まり、雪に埋もれる森を見ているのを、彼は知らないだろう。",
+    "en": "Whose woods these are I think I know…",
+    "source_url": "https://en.wikisource.org/"
+  },
+  {
+    "title": "Le Dormeur du val (excerpt)",
+    "author": "Arthur Rimbaud (1854–1891)",
+    "mood": ["reflect","fresh"],
+    "original": "C'est un trou de verdure où chante une rivière,\nAccrochant follement aux herbes des haillons\nD'argent; où le soleil, de la montagne fière,\nLuit: c'est un petit val qui mousse de rayons.",
+    "ja": "川の歌う緑の窪地。草にかかる銀のぼろ。山からの陽光が泡立つ小さな谷。",
+    "en": "A green hollow where a river sings,\nclutching at the grasses shreds of silver;\nthe sun from the proud mountain gleams—\na little valley foaming with light.",
+    "source_url": "https://fr.wikisource.org/wiki/Le_Dormeur_du_val"
+  },
+  {
+    "title": "静かの海（俳句）",
+    "author": "与謝蕪村 (1716–1783)",
+    "mood": ["calm","fresh"],
+    "original": "春の海 終日のたり のたりかな",
+    "ja": "春の海は、一日じゅう、のたりのたりとゆるやかだ。",
+    "en": "Spring sea—\nall day long,\nits gentle undulations.",
+    "source_url": "https://ja.wikisource.org/"
+  }
+]

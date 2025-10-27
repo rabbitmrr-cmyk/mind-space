@@ -1,124 +1,98 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AIでつくる心の余白 / Mind Space with AI</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>AIリフレーミング・ラボ — Mind Space Lab</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <meta name="description" content="静かで未来的・透明感のある、癒し/創造/内省のためのAI活用ガイド" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* Slightly softer shadow */
-    .soft-shadow { box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); }
+    :root {--heading: 'Playfair Display', serif; --body: 'Noto Sans JP', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;}
+    body{font-family:var(--body)}
+    h1,h2,h3,.font-display{font-family:var(--heading)}
+    .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .bubble{border:1px solid rgba(15,23,42,.06);border-radius:14px;padding:.8rem 1rem;background:#fff}
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
   <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/50 bg-white/30 border-b border-slate-200/40">
-    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="h-8 w-8 rounded-2xl bg-gradient-to-br from-sky-200/70 via-indigo-200/70 to-cyan-200/70 soft-shadow"></div>
-        <span id="brand" class="font-medium tracking-wide">AIでつくる心の余白</span>
-      </div>
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#home" class="hover:opacity-80 transition" id="menu1">ホーム</a>
-        <a href="#concept" class="hover:opacity-80 transition" id="menu2">コンセプト</a>
-        <a href="#guides" class="hover:opacity-80 transition" id="menu3">ガイド</a>
-        <a href="#gallery" class="hover:opacity-80 transition" id="menu4">ギャラリー</a>
-      </nav>
-      <button id="langToggle" class="text-xs px-3 py-1 rounded-full border border-slate-200 hover:bg-white soft-shadow" aria-label="Toggle language">English</button>
+    <div class="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3 hover:opacity-80">
+        <div class="h-7 w-7 rounded-2xl bg-gradient-to-br from-sky-200/70 via-indigo-200/70 to-cyan-200/70"></div>
+        <span id="brand" class="font-medium tracking-wide font-display">Mind Space Lab</span>
+      </a>
+      <button id="langToggle" class="text-xs px-3 py-1 rounded-full border border-slate-200 hover:bg-white">English</button>
     </div>
   </header>
 
-  <main>
-    <section id="home" class="relative overflow-hidden">
-      <div class="absolute inset-0 -z-10">
-        <div class="absolute -top-24 -right-24 h-72 w-72 bg-gradient-to-br from-sky-100 to-cyan-100 blur-3xl rounded-full opacity-60"></div>
-        <div class="absolute -bottom-24 -left-24 h-72 w-72 bg-gradient-to-br from-indigo-100 to-violet-100 blur-3xl rounded-full opacity-60"></div>
-      </div>
-      <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
-        <h1 class="text-3xl md:text-5xl font-semibold tracking-tight leading-tight" id="heroTitle">AIでつくる心の余白</h1>
-        <p class="mt-4 text-slate-600 max-w-2xl" id="tagline">静かで未来的。透明感のある、癒し・創造・内省のためのAI活用</p>
-        <p class="mt-6 text-slate-700 max-w-2xl" id="heroLead">AIを道具ではなく『余白をつくる伴走者』として使う。忙しさの間に、呼吸の入る余韻を。</p>
-        <div class="mt-8 flex flex-wrap gap-3">
-          <a href="#gallery" class="px-5 py-2 rounded-full border border-slate-300 hover:bg-white soft-shadow" id="ctaSecondary">体験ギャラリーへ</a>
-        </div>
-      </div>
+  <main class="mx-auto max-w-4xl px-4 py-10">
+    <h1 class="text-2xl font-semibold font-display" id="title">AIリフレーミング・ラボ</h1>
+    <p class="text-slate-600 mt-2" id="lead">考えすぎた思考を、3行で整える。AIが「攻めずに補助線を引く」リフレーム法。</p>
+
+    <section class="card p-5 mt-6">
+      <h2 class="font-medium font-display mb-2" id="cardHead">プロンプトカード</h2>
+      <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50" id="promptJa">あなたは私の思考整理のパートナーです。
+次の文章を「事実」「解釈」「別の見方」の3行で整理してください。
+攻める口調は使わず、静かな文体で。</pre>
+      <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50 mt-3 hidden" id="promptEn">You are my calm thinking partner.
+Organize my sentence in three lines:
+1) Fact  2) Interpretation  3) Alternative view.
+Use a gentle, non-judgmental tone.</pre>
+      <p class="text-xs text-slate-500 mt-2" id="cardNote">※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。</p>
     </section>
 
-    <section id="concept" class="mx-auto max-w-6xl px-4 py-14">
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="朝もやの静かな湖" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="font-medium mb-2" id="p1Title">癒し (Calm)</h3>
-          <p class="text-sm text-slate-600" id="p1Text">瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" alt="静かなデスクとノート" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="font-medium mb-2" id="p2Title">創造 (Create)</h3>
-          <p class="text-sm text-slate-600" id="p2Text">言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" alt="パステルの抽象形状" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="font-medium mb-2" id="p3Title">内省 (Reflect)</h3>
-          <p class="text-sm text-slate-600" id="p3Text">日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。</p>
-        </div>
+    <section class="card p-5 mt-6">
+      <div class="flex gap-2 items-end">
+        <textarea id="userText" class="flex-1 rounded-lg border border-slate-200 p-3 focus:outline-none focus:ring-2 focus:ring-sky-200" rows="3" placeholder="例）最近、集中できない。"></textarea>
+        <button id="sendBtn" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-white" aria-label="Send">AIに渡す</button>
       </div>
+      <div id="chat" class="mt-5 space-y-3">
+        <!-- Bubbles appear here -->
+      </div>
+      <p class="text-[11px] text-slate-500 mt-3" id="privacyLine">このフォームは、サイトのAPIプロキシ（サーバレス）へ送信されます。個人情報は書かないでください。</p>
     </section>
 
-    <section id="guides" class="mx-auto max-w-6xl px-4 py-14">
-      <h2 class="text-xl font-semibold mb-6" id="sectionGuides">スターターガイド</h2>
-      <div class="grid md:grid-cols-4 gap-6">
-        <article class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-5 hover:shadow-md transition soft-shadow">
-          <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9" alt="淡いブルーの抽象グラデーション" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="text-sm font-medium" id="g1">5分でできる『余白リセット』プロンプト</h3>
-          <p class="mt-2 text-xs text-slate-600" id="gdesc">数分で試せる実践カード。ブックマークして、いつでも余白へ。</p>
-        </article>
-        <article class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-5 hover:shadow-md transition soft-shadow">
-          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" alt="静かなデスクとノート" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="text-sm font-medium" id="g2">雑念を書き出すミニ・ジャーナル</h3>
-          <p class="mt-2 text-xs text-slate-600" id="gdesc2">数分で試せる実践カード。ブックマークして、いつでも余白へ。</p>
-        </article>
-        <article class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-5 hover:shadow-md transition soft-shadow">
-          <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" alt="パステルの抽象形状" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="text-sm font-medium" id="g3">静かな配色・フォントの選び方</h3>
-          <p class="mt-2 text-xs text-slate-600">数分で試せる実践カード。ブックマークして、いつでも余白へ。</p>
-        </article>
-        <article class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-5 hover:shadow-md transition soft-shadow">
-          <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead" alt="やさしい抽象的な波" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
-          <h3 class="text-sm font-medium" id="g4">AIでつくる短い音景 (Soundscape)</h3>
-          <p class="mt-2 text-xs text-slate-600">数分で試せる実践カード。ブックマークして、いつでも余白へ。</p>
-        </article>
+    <section class="mt-8">
+      <h3 class="font-medium font-display mb-2" id="exHead">出力イメージ</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bubble">事実：会議が続いた。<br/>解釈：集中できない自分に不安。<br/>別の見方：休息で精度が戻る。</div>
+        <div class="bubble">Fact: Meetings stacked.<br/>Interpretation: Worry about focus.<br/>Alternative view: Rest restores accuracy.</div>
       </div>
-    </section>
-
-    <section id="gallery" class="mx-auto max-w-6xl px-4 py-14">
-      <h2 class="text-xl font-semibold mb-6" id="sectionStories">体験ギャラリー</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        <figure class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur overflow-hidden soft-shadow">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="朝もやの静かな湖" class="w-full aspect-[4/3] object-cover" />
-          <figcaption class="p-4 text-sm text-slate-700" id="story1">深呼吸を思い出すデスクトップ壁紙</figcaption>
-          <p class="px-4 pb-4 text-xs text-slate-600">集中のためのBGMに： <a href="https://www.amazon.co.jp/dp/B07K8YJ6Q2/?tag=yourtrackingid-22" class="underline" target="_blank" rel="sponsored noopener">ローファイ・ワークBGM（Amazon）</a></p>
-        </figure>
-        <figure class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur overflow-hidden soft-shadow">
-          <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="やわらかな朝の光とコーヒー" class="w-full aspect-[4/3] object-cover" />
-          <figcaption class="p-4 text-sm text-slate-700" id="story2">30語の詩で朝を始める</figcaption>
-          <p class="px-4 pb-4 text-xs text-slate-600">執筆におすすめのノート： <a href="https://www.amazon.co.jp/dp/B00O4VGK1A/?tag=yourtrackingid-22" class="underline" target="_blank" rel="sponsored noopener">モレスキン クラシックノート</a></p>
-        </figure>
-        <figure class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur overflow-hidden soft-shadow">
-          <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead" alt="やさしい抽象的な波" class="w-full aspect-[4/3] object-cover" />
-          <figcaption class="p-4 text-sm text-slate-700" id="story3">3分サウンドで集中の入り口を作る</figcaption>
-          <p class="px-4 pb-4 text-xs text-slate-600">快適なリスニング体験に： <a href="https://www.amazon.co.jp/dp/B0C7SML45T/?tag=yourtrackingid-22" class="underline" target="_blank" rel="sponsored noopener">ノイズキャンセリングイヤホン</a></p>
-        </figure>
-      </div>
-      <p class="mt-6 text-xs text-slate-500">※ 本ページにはアフィリエイトリンクを含む場合があります。</p>
-      <p class="mt-2 text-xs text-slate-500">当サイトはAmazonアソシエイト・プログラムの参加者です。リンク経由のご購入により、当サイトは適格販売により収入を得る場合があります。</p>
     </section>
   </main>
 
-  <footer class="py-10 text-center text-xs text-slate-500" id="footer">© 2025 Mind Space by AI. All rights reserved.</footer>
+  <footer class="py-10 text-center text-xs text-slate-500" id="footer">© 2025 Mind Space Lab.</footer>
 
   <script>
-    (function(){
-      const dict={ja:{toggle:'English'},en:{toggle:'日本語'}};let lang='ja';const el=id=>document.getElementById(id);el('langToggle').addEventListener('click',()=>{lang=lang==='ja'?'en':'ja';el('langToggle').textContent=dict[lang].toggle;document.documentElement.lang=lang==='ja'?'ja':'en';});})();
+    // i18n
+    const dict={
+      ja:{title:"AIリフレーミング・ラボ",lead:"考えすぎた思考を、3行で整える。AIが「攻めずに補助線を引く」リフレーム法。",cardHead:"プロンプトカード",cardNote:"※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。",privacyLine:"このフォームは、サイトのAPIプロキシ（サーバレス）へ送信されます。個人情報は書かないでください。",exHead:"出力イメージ",toggle:"English"},
+      en:{title:"AI Reframing Lab",lead:"Tidy overthinking into three lines. AI draws gentle helper lines:",cardHead:"Prompt Card",cardNote:"Type your concern below and hit “Send to AI”. The response follows the same intent.",privacyLine:"Your text is sent to a serverless API proxy. Please avoid personal data.",exHead:"Sample output",toggle:"日本語"}
+    };
+    const $=id=>document.getElementById(id);let lang="ja";
+    function t(id,key){ if($(id)) $(id).textContent=dict[lang][key]; }
+    function apply(){document.documentElement.lang=lang==='ja'?'ja':'en';t('title','title');t('lead','lead');t('cardHead','cardHead');t('cardNote','cardNote');t('privacyLine','privacyLine');t('exHead','exHead');$('langToggle').textContent=dict[lang].toggle; $('promptJa').classList.toggle('hidden', lang!=='ja'); $('promptEn').classList.toggle('hidden', lang!=='en');}
+    apply();$('langToggle').addEventListener('click',()=>{lang=lang==='ja'?'en':'ja';apply();});
+
+    // Chat logic — calls your serverless proxy at /api/chat
+    async function sendMessage() {
+      const text=$('userText').value.trim();
+      if(!text) return;
+      $('chat').insertAdjacentHTML('beforeend', `<div class="bubble"><strong>YOU:</strong> ${text.replace(/</g,'&lt;')}</div>`);
+      $('userText').value='';
+      $('sendBtn').disabled=true; $('sendBtn').textContent='…';
+      try{
+        const res=await fetch('https://floral-fire-c472.rabbitmrr.workers.dev/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
+        if(!res.ok) throw new Error('Network error');
+        const data=await res.json();
+        $('chat').insertAdjacentHTML('beforeend', `<div class="bubble"><strong>AI:</strong> ${data.reply.replace(/</g,'&lt;').replace(/\n/g,'<br/>')}</div>`);
+      }catch(e){
+        $('chat').insertAdjacentHTML('beforeend', `<div class="bubble">通信に失敗しました。しばらくしてからお試しください。</div>`);
+      }finally{
+        $('sendBtn').disabled=false; $('sendBtn').textContent= lang==='ja' ? 'AIに渡す' : 'Send to AI';
+      }
+    }
+    $('sendBtn').addEventListener('click', sendMessage);
   </script>
 </body>
 </html>

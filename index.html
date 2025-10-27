@@ -1,10 +1,17 @@
 <!doctype html>
-<html lang="ja">
+<html lang="ja" data-default-lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title id="pageTitle">AIでつくる心の余白 / Mind Space with AI</title>
   <meta name="description" id="metaDesc" content="癒し・創造・内省のためのAI活用ガイド" />
+
+  <!-- 検索エンジンに多言語対応を伝える -->
+  <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="ja" />
+  <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/?lang=en" hreflang="en" />
+  <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="x-default" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <style>.soft-shadow{box-shadow:0 8px 24px rgba(15,23,42,.06);}</style>
 
@@ -48,17 +55,17 @@
     <section id="concept" class="mx-auto max-w-6xl px-4 py-14">
       <div class="grid md:grid-cols-3 gap-6">
         <div class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" id="img1" />
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" id="img1" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
           <h3 id="p1Title" class="font-medium mb-2">癒し (Calm)</h3>
           <p id="p1Text" class="text-sm text-slate-600">瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。</p>
         </div>
         <div class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" id="img2" />
+          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" id="img2" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
           <h3 id="p2Title" class="font-medium mb-2">創造 (Create)</h3>
           <p id="p2Text" class="text-sm text-slate-600">言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。</p>
         </div>
         <div class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" id="img3" />
+          <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" id="img3" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
           <h3 id="p3Title" class="font-medium mb-2">内省 (Reflect)</h3>
           <p id="p3Text" class="text-sm text-slate-600">日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。</p>
         </div>
@@ -69,7 +76,6 @@
       <h2 id="sectionGuides" class="text-xl font-semibold mb-6">スターターガイド</h2>
       <div class="grid md:grid-cols-4 gap-6">
 
-        <!-- AIリフレーミング・ラボ を最初に移動 -->
         <article class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-5 hover:shadow-md transition soft-shadow">
           <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="AIリフレーミング・ラボ" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
           <h3 class="text-sm font-medium" id="g0"><a href="/mind-space/lab/reframe.html" class="hover:underline">AIリフレーミング・ラボ（3行で整える）</a></h3>
@@ -77,14 +83,13 @@
         </article>
 
         <article class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur p-5 hover:shadow-md transition soft-shadow">
-          <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" id="img4" />
+          <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9" id="img4" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
           <h3 class="text-sm font-medium" id="g1"><a href="guides/poem-morning.html" class="hover:underline">5分でできる『余白リセット』プロンプト（朝の詩）</a></h3>
           <p class="mt-2 text-xs text-slate-600" id="gdesc">数分で試せる実践カード。ブックマークして、いつでも余白へ。</p>
         </article>
 
       </div>
     </section>
-
   </main>
 
   <footer id="footer" class="py-10 text-center text-xs text-slate-500">© 2025 Mind Space by AI. All rights reserved.</footer>
@@ -125,6 +130,7 @@
 
     const el=id=>document.getElementById(id);
     let lang="ja";
+    if (navigator.language.startsWith("en")) lang="en"; // ← 英語ブラウザで自動切替
 
     function setTxt(id,key){ if(el(id)) el(id).textContent=dict[lang][key]; }
 
@@ -136,6 +142,7 @@
       ["brand","menu1","menu2","menu3","menu4","heroTitle","tagline","heroLead","ctaSecondary",
        "p1Title","p1Text","p2Title","p2Text","p3Title","p3Text","sectionGuides",
        "g0","g0desc","g1","footer"].forEach(k=>setTxt(k,k));
+
       el("langToggle").textContent=dict[lang].toggle;
     }
 

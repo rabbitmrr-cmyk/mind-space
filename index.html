@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>.soft-shadow{box-shadow:0 8px 24px rgba(15,23,42,.06);}</style>
 
-  <!-- Google AdSense (審査/自動広告用):  client ID を設定 -->
+  <!-- Google AdSense (審査/自動広告用): client ID を設定 -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
@@ -98,33 +98,18 @@
           <figcaption class="p-4 text-sm text-slate-700" id="story1">深呼吸を思い出すデスクトップ壁紙</figcaption>
         </figure>
 
-        <!-- ▼ ここを AIリフレーミング・ラボへのリンクに変更しました -->
         <a href="/mind-space/lab/reframe.html" class="group rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur overflow-hidden soft-shadow hover:shadow-md transition block" aria-label="AIリフレーミング・ラボへ">
           <div class="relative">
             <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348" alt="やわらかな朝の光とノート（AIリフレーミング・ラボ）" class="w-full aspect-[4/3] object-cover" id="img9" />
             <span class="absolute top-3 left-3 text-[10px] bg-sky-600/80 text-white px-2 py-0.5 rounded-full tracking-wide">LAB</span>
           </div>
-          <figcaption class="p-4 text-sm text-slate-700 group-hover:underline" id="story2">
-            AIリフレーミング・ラボ（3行で整える）
-          </figcaption>
+          <figcaption class="p-4 text-sm text-slate-700 group-hover:underline" id="story2">AIリフレーミング・ラボ（3行で整える）</figcaption>
         </a>
-        <!-- ▲ ここまで -->
 
         <figure class="rounded-2xl border border-slate-200/50 bg-white/70 backdrop-blur overflow-hidden soft-shadow">
           <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead" alt="やさしい抽象的な波" class="w-full aspect-[4/3] object-cover" id="img10" />
           <figcaption class="p-4 text-sm text-slate-700" id="story3">3分サウンドで集中の入り口を作る</figcaption>
         </figure>
-      </div>
-
-      <!-- 任意：自動広告に任せる場合はこの手動ユニットは削除可 -->
-      <div class="mx-auto max-w-6xl px-4 mt-8">
-        <ins class="adsbygoogle"
-             style="display:block; text-align:center;"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-             data-ad-slot="YYYYYYYYYY"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
     </section>
   </main>
@@ -133,13 +118,46 @@
 
   <script>
     const dict={
-      ja:{brand:"AIでつくる心の余白",menu1:"ホーム",menu2:"コンセプト",menu3:"ガイド",menu4:"ギャラリー",heroTitle:"AIでつくる心の余白",tagline:"静かで未来的。透明感のある、癒し・創造・内省のためのAI活用",heroLead:"AIを道具ではなく『余白をつくる伴走者』として使う。忙しさの間に、呼吸の入る余韻を。",ctaSecondary:"体験ギャラリーへ",p1Title:"癒し (Calm)",p1Text:"瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。",p2Title:"創造 (Create)",p2Text:"言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。",p3Title:"内省 (Reflect)",p3Text:"日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。",sectionGuides:"スターターガイド",g1:"5分でできる『余白リセット』プロンプト（朝の詩）",g2:"ミニ・ジャーナル（近日公開）",g3:"静かな配色・フォント（近日公開）",g4:"短い音景（近日公開）",sectionStories:"体験ギャラリー",footer:"© 2025 Mind Space by AI. All rights reserved.",toggle:"English"},
-      en:{brand:"Mind Space with AI",menu1:"Home",menu2:"Concept",menu3:"Guides",menu4:"Gallery",heroTitle:"Mind Space with AI",tagline:"Quiet, futuristic, translucent—AI for Calm, Creation, and Reflection",heroLead:"Use AI not just as a tool, but as a companion that carves out room to breathe.",ctaSecondary:"Explore the gallery",p1Title:"Calm",p1Text:"Meditative prompts, gentle soundscapes, and small automations to reclaim off-time.",p2Title:"Create",p2Text:"Words, color, sound, composition—tiny recipes to turn sparks into form.",p3Title:"Reflect",p3Text:"Daily reflection templates and a weekly review practice that sticks.",sectionGuides:"Starter Guides",g1:"5-minute ‘Reset’ prompts (Morning poem)",g2:"Mini-journal (coming soon)",g3:"Quiet palettes & type (coming soon)",g4:"Short soundscapes (coming soon)",sectionStories:"Experience Gallery",footer:"© 2025 Mind Space by AI. All rights reserved.",toggle:"日本語"}
+      ja:{
+        brand:"AIでつくる心の余白",menu1:"ホーム",menu2:"コンセプト",menu3:"ガイド",menu4:"ギャラリー",
+        heroTitle:"AIでつくる心の余白",tagline:"静かで未来的。透明感のある、癒し・創造・内省のためのAI活用",
+        heroLead:"AIを道具ではなく『余白をつくる伴走者』として使う。忙しさの間に、呼吸の入る余韻を。",
+        ctaSecondary:"体験ギャラリーへ",
+        p1Title:"癒し (Calm)",p1Text:"瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。",
+        p2Title:"創造 (Create)",p2Text:"言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。",
+        p3Title:"内省 (Reflect)",p3Text:"日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。",
+        sectionGuides:"スターターガイド",
+        g1:"5分でできる『余白リセット』プロンプト（朝の詩）",g2:"ミニ・ジャーナル（近日公開）",g3:"静かな配色・フォント（近日公開）",g4:"短い音景（近日公開）",
+        sectionStories:"体験ギャラリー",story1:"深呼吸を思い出すデスクトップ壁紙",story2:"AIリフレーミング・ラボ（3行で整える）",story3:"3分サウンドで集中の入り口を作る",
+        footer:"© 2025 Mind Space by AI. All rights reserved.",toggle:"English"
+      },
+      en:{
+        brand:"Mind Space with AI",menu1:"Home",menu2:"Concept",menu3:"Guides",menu4:"Gallery",
+        heroTitle:"Mind Space with AI",tagline:"Quiet, futuristic, translucent—AI for Calm, Creation, and Reflection",
+        heroLead:"Use AI not just as a tool, but as a companion that carves out room to breathe.",
+        ctaSecondary:"Explore the gallery",
+        p1Title:"Calm",p1Text:"Meditative prompts, gentle soundscapes, and small automations to reclaim off-time.",
+        p2Title:"Create",p2Text:"Words, color, sound, composition—tiny recipes to turn sparks into form.",
+        p3Title:"Reflect",p3Text:"Daily reflection templates and a weekly review practice that sticks.",
+        sectionGuides:"Starter Guides",
+        g1:"5-minute ‘Reset’ prompts (Morning poem)",g2:"Mini-journal (coming soon)",g3:"Quiet palettes & type (coming soon)",g4:"Short soundscapes (coming soon)",
+        sectionStories:"Experience Gallery",story1:"Desktop wallpaper for mindful breathing",story2:"AI Reframing Lab (3-line reflection)",story3:"3-minute soundscape to refocus",
+        footer:"© 2025 Mind Space with AI. All rights reserved.",toggle:"日本語"
+      }
     };
-    const el=(id)=>document.getElementById(id);let lang="ja";
+
+    const el=id=>document.getElementById(id);let lang="ja";
     function setTxt(id,key){if(el(id))el(id).textContent=dict[lang][key];}
-    function apply(){document.documentElement.lang=lang==="ja"?"ja":"en";setTxt("brand","brand");setTxt("menu1","menu1");setTxt("menu2","menu2");setTxt("menu3","menu3");setTxt("menu4","menu4");setTxt("heroTitle","heroTitle");setTxt("tagline","tagline");setTxt("heroLead","heroLead");setTxt("ctaSecondary","ctaSecondary");setTxt("p1Title","p1Title");setTxt("p1Text","p1Text");setTxt("p2Title","p2Title");setTxt("p2Text","p2Text");setTxt("p3Title","p3Title");setTxt("p3Text","p3Text");setTxt("sectionGuides","sectionGuides");setTxt("g1","g1");setTxt("g2","g2");setTxt("g3","g3");setTxt("g4","g4");setTxt("sectionStories","sectionStories");setTxt("footer","footer");el("langToggle").textContent=dict[lang].toggle;}
-    apply();el("langToggle").addEventListener("click",()=>{lang=lang==="ja"?"en":"ja";apply();});
+    function apply(){
+      document.documentElement.lang=lang==="ja"?"ja":"en";
+      ["brand","menu1","menu2","menu3","menu4","heroTitle","tagline","heroLead","ctaSecondary",
+      "p1Title","p1Text","p2Title","p2Text","p3Title","p3Text","sectionGuides",
+      "g1","g2","g3","g4","sectionStories","story1","story2","story3","footer"]
+      .forEach(k=>setTxt(k,k));
+      el("langToggle").textContent=dict[lang].toggle;
+    }
+    apply();
+    el("langToggle").addEventListener("click",()=>{lang=lang==="ja"?"en":"ja";apply();});
   </script>
 </body>
 </html>

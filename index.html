@@ -82,7 +82,7 @@ Use a gentle, non-judgmental tone.</pre>
       $('userText').value='';
       $('sendBtn').disabled=true; $('sendBtn').textContent='…';
       try{
-        const res=await fetch('https://floral-fire-c472.rabbitmrr.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
+        const res=await fetch('https://floral-fire-c472.rabbitmrr.workers.dev/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
         if(!res.ok) throw new Error('Network error');
         const data=await res.json();
         $('chat').insertAdjacentHTML('beforeend', `<div class="bubble"><strong>AI:</strong> ${data.reply.replace(/</g,'&lt;').replace(/\n/g,'<br/>')}</div>`);

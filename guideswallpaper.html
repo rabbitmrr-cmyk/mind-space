@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ja" data-default-lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title id="title">深呼吸を思い出す壁紙 — Mind Space</title>
+  <meta name="description" id="desc" content="静かな写真の壁紙。デスクトップで余白を思い出す。"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
+  <header class="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between">
+    <a href="../index.html" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
+    <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
+  </header>
+
+  <main class="mx-auto max-w-4xl px-4 pb-14">
+    <h1 class="text-2xl font-semibold" id="h1">深呼吸を思い出す壁紙</h1>
+    <p class="mt-2 text-slate-600" id="lead">静かな画像を配布します。デスクトップに設定して、ひと呼吸の合図に。</p>
+
+    <div class="grid md:grid-cols-2 gap-6 mt-6">
+      <!-- 画像カード -->
+      <a class="block rounded-2xl overflow-hidden border bg-white/70 hover:shadow-md" href="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=90" target="_blank" rel="noopener">
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" class="w-full aspect-[4/3] object-cover" alt="Lake wallpaper"/>
+        <div class="p-4 text-sm">Lake — 1920px</div>
+      </a>
+
+      <a class="block rounded-2xl overflow-hidden border bg-white/70 hover:shadow-md" href="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1920&q=90" target="_blank" rel="noopener">
+        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80" class="w-full aspect-[4/3] object-cover" alt="Blue gradient wallpaper"/>
+        <div class="p-4 text-sm">Blue gradient — 1920px</div>
+      </a>
+    </div>
+
+    <section class="mt-8 text-sm text-slate-600">
+      <h2 class="font-medium" id="how">設定方法（かんたん）</h2>
+      <ol class="list-decimal pl-5 mt-2 space-y-1" id="steps">
+        <li>画像をクリックして開く</li>
+        <li>右クリック → 画像を保存</li>
+        <li>PCやスマホの壁紙設定で選ぶ</li>
+      </ol>
+    </section>
+  </main>
+
+  <script>
+    const dict={ja:{title:"深呼吸を思い出す壁紙 — Mind Space",desc:"静かな写真の壁紙。デスクトップで余白を思い出す。",
+      back:"ホームへ戻る",h1:"深呼吸を思い出す壁紙",lead:"静かな画像を配布します。デスクトップに設定して、ひと呼吸の合図に。",
+      how:"設定方法（かんたん）",steps:["画像をクリックして開く","右クリック → 画像を保存","PCやスマホの壁紙設定で選ぶ"],toggle:"English"},
+      en:{title:"Wallpaper for mindful breathing — Mind Space",desc:"Quiet wallpapers to gently remind you to pause.",
+      back:"Back to Home",h1:"Wallpaper for mindful breathing",lead:"Download quiet images and set as your desktop as a gentle pause cue.",
+      how:"How to set (quick)",steps:["Open the image","Right-click → Save image","Choose it in your device's wallpaper settings"],toggle:"日本語"}};
+    const $=id=>document.getElementById(id); let lang="ja"; if(navigator.language?.startsWith("en")) lang="en";
+    function apply(){
+      document.title=dict[lang].title; $("desc").setAttribute("content",dict[lang].desc);
+      $("back").textContent=dict[lang].back; $("h1").textContent=dict[lang].h1; $("lead").textContent=dict[lang].lead; $("how").textContent=dict[lang].how;
+      const ul=$("steps"); ul.innerHTML=""; dict[lang].steps.forEach(t=>{const li=document.createElement("li"); li.textContent=t; ul.appendChild(li);});
+      $("lang").textContent=dict[lang].toggle; document.documentElement.lang=lang;
+    }
+    apply(); $("lang").addEventListener("click",()=>{lang=lang==="ja"?"en":"ja";apply();});
+  </script>
+</body>
+</html>

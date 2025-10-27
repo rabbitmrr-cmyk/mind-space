@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja" data-default-lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title id="title">3分サウンドで整える — Mind Space</title>
+  <meta name="description" id="desc" content="やさしい音の入口。3分で気持ちを整える小さな音景。"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .soft{box-shadow:0 8px 24px rgba(15,23,42,.06);}
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
+  <header class="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between">
+    <a href="../index.html" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
+    <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
+  </header>
+
+  <main class="mx-auto max-w-4xl px-4 pb-14">
+    <h1 class="text-2xl font-semibold" id="h1">3分サウンドで整える</h1>
+    <p class="mt-2 text-slate-600" id="lead">やさしい音の入口。集中や休息への切り替えに。</p>
+
+    <section class="card p-5 mt-5">
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+        <label class="text-sm">
+          <span id="modeLabel">環境</span><br/>
+          <select id="mode" class="mt-1 border rounded px-2 py-1">
+            <option value="soft">Soft tone</option>
+            <option value="brown">Brown noise</option>
+            <option value="rain">Rain-like</option>
+          </select>
+        </label>
+        <label class="text-sm">
+          <span id="volLabel">音量</span><br/>
+          <input id="vol" type="range" min="0" max="1" step="0.01" value="0.2" class="w-48"/>
+        </label>
+        <button id="play" class="px-4 py-2 rounded border soft" data-state="stopped">▶ <span id="playTxt">3分再生</span></button>
+        <span class="text-sm text-slate-500" id="timer">03:00</span>
+      </div>
+      <p class="text-xs text-slate-500 mt-3" id="note">※ 音量にご注意ください。別のタブに切り替えても再生は続きます。</p>
+    </section>
+
+    <section class="mt-8">
+      <h2 class="font-medium" id="tipHead">コツ</h2>
+      <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1" id="tips">
+        <li>目を閉じて、呼吸だけを感じる</li>
+        <li>「はじめる→続ける→おわる」を3分で完了</li>
+        <li>終わったら姿勢をひとつ正す</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // i18n
+    const dict={ja:{title:"3分サウンドで整える — Mind Space",desc:"やさしい音の入口。3分で気持ちを整える小さな音景。",
+      back:"ホームへ戻る",h1:"3分サウンドで整える",lead:"やさしい音の入口。集中や休息への切り替えに。",
+      modeLabel:"環境",volLabel:"音量",play:"3分再生",stop:"停止",note:"※ 音量にご注意ください。別のタブに切り替えても再生は続きます。",
+      tipHead:"コツ",tips:["目を閉じて、呼吸だけを感じる","「はじめる→続ける→おわる」を3分で完了","終わったら姿勢をひとつ正す"],toggle:"English"},
+      en:{title:"3-minute soundscape — Mind Space",desc:"A gentle entrance to focus or rest. Three minutes of soft sound.",
+      back:"Back to Home",h1:"3-minute soundscape",lead:"Soft entrance for switching into focus or rest.",
+      modeLabel:"Environment",volLabel:"Volume",play:"Play 3 min",stop:"Stop",note:"* Mind the volume. Playback continues in background tabs.",
+      tipHead:"Tips",tips:["Close your eyes and feel the breath","Complete a tiny cycle: start → continue → finish","Afterward, straighten your posture once"],toggle:"日本語"}};
+    const $=id=>document.getElementById(id); let lang="ja"; if(navigator.language?.startsWith("en")) lang="en";
+    function apply(){
+      document.title=dict[lang].title; $("desc").setAttribute("content",dict[lang].desc);
+      ["back","h1","lead","modeLabel","volLabel","note","tipHead"].forEach(k=>{$(k).textContent=dict[lang][k];});
+      $("playTxt").textContent=dict[lang].play; const ul=$("tips"); ul.innerHTML=""; dict[lang].tips.forEach(t=>{const li=document.createElement("li"); li.textContent=t; ul.appendChild(li);});
+      $("lang").textContent=dict[lang].toggle; document.documentElement.lang=lang;
+    }
+    apply(); $("lang").addEventListener("click",()=>{lang=lang==="ja"?"en":"ja";apply();});
+
+    // WebAudio
+    let ctx, gain, osc, noise, rain;
+    function stopAll(){
+      [osc,noise,rain].forEach(n=>{try{n&&n.stop(0)}catch{}});
+      osc=noise=rain=null;
+    }
+    function start(mode){
+      if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)();
+      const g=ctx.createGain(); g.gain.value=parseFloat($("vol").value); g.connect(ctx.destination); gain=g;
+
+      if(mode==="brown"){ // brown noise
+        const buffer=ctx.createBuffer(1, ctx.sampleRate*3, ctx.sampleRate);
+        const data=buffer.getChannelData(0);
+        let lastOut=0.0; for(let i=0;i<data.length;i++){ const white=Math.random()*2-1; lastOut=(lastOut+0.02*white)/1.02; data[i]=lastOut*3.5; }
+        noise=ctx.createBufferSource(); noise.buffer=buffer; noise.loop=true; noise.connect(g); noise.start();
+      }else if(mode==="rain"){ // filtered noise with slow LFO
+        const buffer=ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
+        const data=buffer.getChannelData(0); for(let i=0;i<data.length;i++){ data[i]=Math.random()*2-1; }
+        noise=ctx.createBufferSource(); noise.buffer=buffer; noise.loop=true;
+        const biquad=ctx.createBiquadFilter(); biquad.type="lowpass"; biquad.frequency.value=1200;
+        const lfo=ctx.createOscillator(); lfo.frequency.value=0.2; const lfoGain=ctx.createGain(); lfoGain.gain.value=800;
+        lfo.connect(lfoGain).connect(biquad.frequency); noise.connect(biquad).connect(g); lfo.start(); rain=noise; noise.start();
+      }else{ // soft sine pad
+        osc=ctx.createOscillator(); osc.type="sine"; osc.frequency.value=174; // Solfeggio-ish, calm
+        const biquad=ctx.createBiquadFilter(); biquad.type="lowpass"; biquad.frequency.value=1000;
+        osc.connect(biquad).connect(g); osc.start();
+      }
+    }
+
+    // Controls
+    $("vol").addEventListener("input", e=>{ if(gain) gain.gain.value=parseFloat(e.target.value); });
+    let countdown=null;
+    $("play").addEventListener("click", async ()=>{
+      const state=$("play").dataset.state;
+      if(state==="stopped"){
+        start($("mode").value);
+        $("play").dataset.state="playing"; $("playTxt").textContent=dict[lang].stop; // ラベル更新
+        // 3分カウントダウン
+        let sec=180; clearInterval(countdown); $("timer").textContent="03:00";
+        countdown=setInterval(()=>{
+          sec--; const m=String(Math.floor(sec/60)).padStart(2,"0"); const s=String(sec%60).padStart(2,"0");
+          $("timer").textContent=`${m}:${s}`;
+          if(sec<=0){ clearInterval(countdown); stopAll(); $("play").dataset.state="stopped"; $("playTxt").textContent=dict[lang].play; $("timer").textContent="03:00"; }
+        },1000);
+      }else{
+        clearInterval(countdown); stopAll(); $("play").dataset.state="stopped"; $("playTxt").textContent=dict[lang].play; $("timer").textContent="03:00";
+      }
+    });
+  </script>
+</body>
+</html>

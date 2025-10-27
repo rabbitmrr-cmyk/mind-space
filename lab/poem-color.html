@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title id="title">色で選ぶ5分の詩リセット — Mind Space</title>
-  <meta name="description" id="desc" content="RGBカラーパレットから色（ムード）を選び、世界の詩を一篇。原文＋日本語/英語で静かに読む。"/>
+  <meta name="description" id="desc" content="RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋日本語/英語で静かに読む。"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
@@ -20,7 +20,7 @@
 
   <main class="mx-auto max-w-4xl px-4 pb-16">
     <h1 class="text-2xl font-semibold" id="h1">色で選ぶ 5分の詩リセット</h1>
-    <p class="mt-2 text-slate-600" id="lead">下の<strong>RGBカラーパレット</strong>から色を選ぶと、世界の詩を一篇だけ。原文と日本語/英語で静かに読む時間を。</p>
+    <p class="mt-2 text-slate-600" id="lead">下の<strong>RGBカラーパレット</strong>から色を選ぶと、世界の短い詩を一篇だけ。原文と日本語/英語で静かに読む時間を。</p>
 
     <section class="card p-5 mt-5">
       <div class="flex flex-col md:flex-row md:items-center gap-4">
@@ -31,12 +31,10 @@
 
         <div class="text-sm text-slate-700">
           <div class="flex items-center gap-2">
-            <span id="moodLabel">推定ムード:</span>
-            <span id="moodText" class="px-2 py-0.5 rounded bg-white/70 border">—</span>
+            <!-- ムードラベル/テキスト/ヒントは削除 -->
             <span class="dot" id="chip" style="background:#5FA8FF"></span>
             <code id="hex" class="text-xs text-slate-500">#5FA8FF</code>
           </div>
-          <div class="text-xs text-slate-500 mt-1" id="hint">青=さわやか / 緑=おだやか / 赤=情熱 / オレンジ=元気 / 紫・黒=内省</div>
         </div>
 
         <div class="md:ml-auto">
@@ -48,7 +46,7 @@
     <section class="card p-6 mt-6">
       <div class="flex items-center justify-between gap-3">
         <div>
-          <div class="text-xs tracking-wide uppercase text-slate-500" id="badge">選ばれたムード</div>
+          <!-- ムード用バッジも非表示に -->
           <h2 class="text-lg font-medium" id="poemTitle">—</h2>
           <div class="text-sm text-slate-500" id="poemMeta">—</div>
         </div>
@@ -63,63 +61,64 @@
     </section>
 
     <p class="mt-4 text-xs text-slate-500">
-      ※ 原文は<strong>パブリックドメイン</strong>から取得。訳は直訳優先（なければ表示しません）。出典リンクはカード上部に表示します。
+      ※ 原文は<strong>パブリックドメイン</strong>から取得。常に短い抜粋を表示し、訳はUIの言語に合わせて自動で短く整えます。出典リンクはカード上部に表示します。
     </p>
   </main>
 
   <script>
-    // i18n
+    // ===== i18n =====
     const dict={
-      ja:{title:"色で選ぶ5分の詩リセット — Mind Space",desc:"RGBカラーパレットから色（ムード）を選び、世界の詩を一篇。原文＋日本語/英語で静かに読む。",
+      ja:{title:"色で選ぶ5分の詩リセット — Mind Space",desc:"RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋日本語/英語で静かに読む。",
           back:"ホームへ戻る",h1:"色で選ぶ 5分の詩リセット",
-          lead:"下のRGBカラーパレットから色を選ぶと、世界の詩を一篇だけ。原文と日本語/英語で静かに読む時間を。",
-          pick:"色を選ぶ（RGBパレット）",moodLabel:"推定ムード:",hint:"青=さわやか / 緑=おだやか / 赤=情熱 / オレンジ=元気 / 紫・黒=内省",
-          badge:"選ばれたムード",btnNew:"詩を表示",toggle:"English",
-          moods:{fresh:"さわやか",calm:"おだやか",passion:"情熱",vital:"元気",reflect:"内省"}},
-      en:{title:"Color-picked 5-minute poem reset — Mind Space",desc:"Pick a color from an RGB palette; get one public-domain poem—original + your language.",
+          lead:"下のRGBカラーパレットから色を選ぶと、世界の短い詩を一篇だけ。原文と日本語/英語で静かに読む時間を。",
+          pick:"色を選ぶ（RGBパレット）",btnNew:"詩を表示",toggle:"English",toggleOT:"原文 / 訳"},
+      en:{title:"Color-picked 5-minute poem reset — Mind Space",desc:"Pick a color; get one short public-domain poem in original + your language.",
           back:"Back to Home",h1:"5-minute poem reset by color",
-          lead:"Choose a color from the RGB palette to receive one public-domain poem. Read quietly in original + English/Japanese.",
-          pick:"Pick a color (RGB palette)",moodLabel:"Estimated mood:",hint:"Blue=fresh • Green=calm • Red=passion • Orange=vital • Violet/Black=reflective",
-          badge:"Selected mood",btnNew:"Show poem",toggle:"日本語",
-          moods:{fresh:"fresh",calm:"calm",passion:"passion",vital:"vital",reflect:"reflective"}}
+          lead:"Pick a color from the RGB palette to receive one short public-domain poem. Read in original + English/Japanese.",
+          pick:"Pick a color (RGB palette)",btnNew:"Show poem",toggle:"日本語",toggleOT:"Original / Translation"}
     };
     const $=id=>document.getElementById(id);
     let uiLang="ja"; if(navigator.language?.startsWith("en")) uiLang="en";
     function applyUI(){
       document.title=dict[uiLang].title; $("desc").setAttribute("content",dict[uiLang].desc);
-      ["back","h1","lead","pick","moodLabel","hint"].forEach(k=>{$(k).textContent=dict[uiLang][k];});
-      $("btnNew").textContent=dict[uiLang].btnNew; $("badge").textContent=dict[uiLang].badge;
-      $("toggleLang").textContent = (uiLang==="ja" ? "原文 / 訳" : "Original / Translation");
+      ["back","h1","lead","pick"].forEach(k=>{$(k).textContent=dict[uiLang][k];});
+      $("btnNew").textContent=dict[uiLang].btnNew;
+      $("toggleLang").textContent = dict[uiLang].toggleOT;
+      $("lang").textContent = dict[uiLang].toggle;
       document.documentElement.lang=uiLang;
     }
 
-    // HSV変換
+    // ===== HSV変換 =====
     function hexToHSV(hex){
       const c=hex.replace("#",""); const r=parseInt(c.slice(0,2),16)/255, g=parseInt(c.slice(2,4),16)/255, b=parseInt(c.slice(4,6),16)/255;
       const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min; let h=0;
       if(d!==0){ if(max===r) h=((g-b)/d)%6; else if(max===g) h=(b-r)/d+2; else h=(r-g)/d+4; h*=60; if(h<0) h+=360;}
       const s=max===0?0:d/max; const v=max; return {h,s,v};
     }
+
+    // ===== 改良マッピング（UIには出さず内部のみ） =====
     function hsvToMood({h,s,v}){
-      if(v<0.2) return "reflect";     // 暗い → 内省
-      if(s<0.25) return "calm";       // 低彩度 → おだやか
-      if(v>0.9 && s>0.4) return "fresh"; // 明るく澄んだ → さわやか
-      if(h<25)  return "vital";
-      if(h<50)  return "passion";
-      if(h<160) return "calm";
-      if(h<260) return "fresh";
-      return "reflect";
+      if(v < 0.20) return "reflect";                     // 暗色 → 内省
+      if(s < 0.20) return (v > 0.85 ? "fresh" : "calm"); // 低彩度 → calm / とても明るければ fresh
+      if(h < 15)  return (s>0.5 && v>0.6) ? "passion" : "vital"; // 赤
+      if(h < 45)  return (s>0.5 && v>0.6) ? "vital"   : "passion"; // 橙
+      if(h < 70)  return (s>0.4) ? "vital" : "fresh";   // 黄
+      if(h < 160) return (s>0.4) ? "calm"  : "fresh";   // 緑
+      if(h < 210) return "fresh";                       // 青緑
+      if(h < 260) return (s>0.35) ? "fresh" : "reflect";// 青〜藍
+      if(h < 300) return (s>0.35) ? "reflect" : "calm"; // 紫
+      return "reflect";                                  // 赤紫など
     }
 
-    // 状態
-    const WORKER_BASE = "https://small-mode-829d.rabbitmrr.workers.dev";
+    // ===== 状態 =====
+    const WORKER_BASE = "https://small-mode-829d.rabbitmrr.workers.dev"; // ←必要に応じて変更
     const ALLOW_HOSTS = ["en.wikisource.org","ja.wikisource.org","fr.wikisource.org","zh.wikisource.org","poetrydb.org","www.gutenberg.org"];
-    let currentMood="fresh", currentPoem=null, showOriginal=true;
+    let currentMood="fresh", showOriginal=true;
 
-    function updateMoodUI(hex){
-      $("chip").style.background = hex; $("hex").textContent = hex.toUpperCase();
-      const hsv = hexToHSV(hex); currentMood = hsvToMood(hsv);
-      $("moodText").textContent = dict[uiLang].moods[currentMood];
+    function updateFromColor(hex){
+      $("chip").style.background = hex;
+      $("hex").textContent = hex.toUpperCase();
+      currentMood = hsvToMood(hexToHSV(hex)); // ムードは内部のみ
     }
 
     function withTimeout(promise, ms=5000){
@@ -129,7 +128,7 @@
 
     async function getOnlinePoem(mood, uiLang){
       const url = `${WORKER_BASE}/api/poem?mood=${encodeURIComponent(mood)}&lang=${encodeURIComponent(uiLang)}`;
-      const res = await withTimeout(fetch(url, {headers:{"accept":"application/json"}}), 5000);
+      const res = await withTimeout(fetch(url, {headers:{"accept":"application/json"}}), 6500);
       if(!res.ok) throw new Error("net");
       const j = await res.json();
       if(!j.ok || !j.poem) throw new Error("notfound");
@@ -161,26 +160,24 @@
         const p = await getOnlinePoem(mood, uiLang);
         $("poemTitle").textContent = p.title;
         $("poemMeta").innerHTML = `${p.author} · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>`;
-        $("orig").textContent = p.original;
+        $("orig").textContent = p.original || "";
         $("tran").textContent = p.translation || "";
       }catch(_e){
         const p = await getLocalPoem(mood, uiLang);
         $("poemTitle").textContent = p.title + (uiLang==="ja" ? "（ローカル）" : " (local)");
         $("poemMeta").innerHTML = `${p.author}` + (p.source_url ? ` · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>` : "");
-        $("orig").textContent = p.original;
+        $("orig").textContent = p.original || "";
         $("tran").textContent = p.translation || "";
-      }finally{
-        $("badge").textContent = (uiLang==="ja"?"選ばれたムード: ":"Selected mood: ") + dict[uiLang].moods[currentMood];
       }
     }
 
     // 初期化
     applyUI();
-    updateMoodUI($("picker").value);
+    updateFromColor($("picker").value);
 
     // イベント
-    $("btnNew").addEventListener("click", ()=>{ loadPoem(currentMood, uiLang); });
-    $("picker").addEventListener("input", e=>{ updateMoodUI(e.target.value); });
+    $("btnNew").addEventListener("click", ()=> loadPoem(currentMood, uiLang));
+    $("picker").addEventListener("input", e=> updateFromColor(e.target.value));
     $("toggleLang").addEventListener("click", ()=>{
       showOriginal = !showOriginal;
       const o=$("orig"), t=$("tran");
@@ -189,7 +186,6 @@
     $("lang").addEventListener("click", ()=>{
       uiLang = (uiLang==="ja"?"en":"ja");
       applyUI();
-      $("moodText").textContent = dict[uiLang].moods[currentMood];
     });
   </script>
 </body>

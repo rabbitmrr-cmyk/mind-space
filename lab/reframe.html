@@ -95,10 +95,12 @@ A short reassuring closing line is welcome if it feels natural.</pre>
         howList:["いまの気持ちや状況を、1〜2文で入力します。","「AIに渡す」を押すと、事実 / 解釈 / 別の見方の3行にやさしく整理されます。","必要なら、もう一度短く書き直して試してみてください。少しずつ、視点がほぐれていきます。"],
         howNote:"※ 個人情報は書かないでください。長文よりも「短く・要点だけ」の方が整いやすいです。",
         exHead:"出力イメージ",
+        privacyLine:"このフォームは、サイトのAPIプロキシ（Cloudflare Workers AI）へ送信されます。個人情報は書かないでください。",
         promptSummary:"プロンプトカード（確認用・折りたたみ）",
         labels:{fact:"事実", interp:"解釈", alt:"別の見方"},
         toggle:"English",
-        cta:"AIに渡す"
+        cta:"AIに渡す",
+        placeholder:"例）最近、集中できない。短い時間でも落ち着ける方法が知りたい。"
       },
       en:{
         title:"AI Reframing Lab",
@@ -107,10 +109,12 @@ A short reassuring closing line is welcome if it feels natural.</pre>
         howList:["Write your feeling/situation in 1–2 sentences.","Tap “Send to AI” — it will shape it into three lines: Fact / Interpretation / Alternative view.","If needed, try again with a shorter, clearer sentence to gradually soften the view."],
         howNote:"* Please avoid personal data. Short and simple inputs work best.",
         exHead:"Sample output",
+        privacyLine:"This form sends your text to a Cloudflare Workers AI proxy. Please avoid entering personal information.",
         promptSummary:"Prompt card (for reference)",
         labels:{fact:"Fact", interp:"Interpretation", alt:"Alternative view"},
         toggle:"日本語",
-        cta:"Send to AI"
+        cta:"Send to AI",
+        placeholder:"e.g. I’ve been losing focus lately. I’d like to find a short way to feel calm again."
       }
     };
 
@@ -126,6 +130,7 @@ A short reassuring closing line is welcome if it feels natural.</pre>
       dict[lang].howList.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; listEl.appendChild(li); });
       setText('howNote', dict[lang].howNote);
       setText('exHead', dict[lang].exHead);
+      setText('privacyLine', dict[lang].privacyLine);
       setText('promptSummary', dict[lang].promptSummary);
       setText('labFact', dict[lang].labels.fact);
       setText('labInterp', dict[lang].labels.interp);
@@ -133,7 +138,8 @@ A short reassuring closing line is welcome if it feels natural.</pre>
       $('promptJa').classList.toggle('hidden', lang!=='ja');
       $('promptEn').classList.toggle('hidden', lang!=='en');
       $('langToggle').textContent = dict[lang].toggle;
-      $('sendBtn').textContent = dict[lang].cta;  // ✅ ボタン文言更新
+      $('sendBtn').textContent = dict[lang].cta;
+      $('userText').placeholder = dict[lang].placeholder; // ✅ プレースホルダー切替
     }
 
     apply();
@@ -180,7 +186,7 @@ A short reassuring closing line is welcome if it feels natural.</pre>
         $('chat').insertAdjacentHTML('beforeend', `<div class="bubble">通信に失敗しました。しばらくしてからお試しください。</div>`);
       }finally{
         $('sendBtn').disabled=false;
-        $('sendBtn').textContent = dict[lang].cta; // ✅ 言語ごとに戻す
+        $('sendBtn').textContent = dict[lang].cta;
       }
     }
     $('sendBtn').addEventListener('click', sendMessage);

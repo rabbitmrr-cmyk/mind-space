@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title id="title">色で選ぶ5分の詩リセット — Mind Space</title>
-  <meta name="description" id="desc" content="RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋日本語/英語で静かに読む。"/>
+  <title id="title">色で選ぶ5分の詩 — Mind Space</title>
+  <meta name="description" id="desc" content="RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋あなたの言語で静かに読む。"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
@@ -19,7 +19,7 @@
   </header>
 
   <main class="mx-auto max-w-4xl px-4 pb-16">
-    <h1 class="text-2xl font-semibold" id="h1">色で選ぶ 5分の詩リセット</h1>
+    <h1 class="text-2xl font-semibold" id="h1">色で選ぶ 5分の詩</h1>
     <p class="mt-2 text-slate-600" id="lead">下の<strong>RGBカラーパレット</strong>から色を選ぶと、世界の短い詩を一篇だけ。原文と日本語/英語で静かに読む時間を。</p>
 
     <section class="card p-5 mt-5">
@@ -31,7 +31,6 @@
 
         <div class="text-sm text-slate-700">
           <div class="flex items-center gap-2">
-            <!-- ムードラベル/テキスト/ヒントは削除 -->
             <span class="dot" id="chip" style="background:#5FA8FF"></span>
             <code id="hex" class="text-xs text-slate-500">#5FA8FF</code>
           </div>
@@ -46,7 +45,6 @@
     <section class="card p-6 mt-6">
       <div class="flex items-center justify-between gap-3">
         <div>
-          <!-- ムード用バッジも非表示に -->
           <h2 class="text-lg font-medium" id="poemTitle">—</h2>
           <div class="text-sm text-slate-500" id="poemMeta">—</div>
         </div>
@@ -61,15 +59,15 @@
     </section>
 
     <p class="mt-4 text-xs text-slate-500">
-      ※ 原文は<strong>パブリックドメイン</strong>から取得。常に短い抜粋を表示し、訳はUIの言語に合わせて自動で短く整えます。出典リンクはカード上部に表示します。
+      ※ 原文は<strong>パブリックドメイン</strong>から取得。短い抜粋を表示し、訳はUIの言語に忠実に表示します（人間訳があれば優先します）。出典リンクはカード上部に表示します。
     </p>
   </main>
 
   <script>
     // ===== i18n =====
     const dict={
-      ja:{title:"色で選ぶ5分の詩リセット — Mind Space",desc:"RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋日本語/英語で静かに読む。",
-          back:"ホームへ戻る",h1:"色で選ぶ 5分の詩リセット",
+      ja:{title:"色で選ぶ5分の詩 — Mind Space",desc:"RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋あなたの言語で静かに読む。",
+          back:"ホームへ戻る",h1:"色で選ぶ 5分の詩",
           lead:"下のRGBカラーパレットから色を選ぶと、世界の短い詩を一篇だけ。原文と日本語/英語で静かに読む時間を。",
           pick:"色を選ぶ（RGBパレット）",btnNew:"詩を表示",toggle:"English",toggleOT:"原文 / 訳"},
       en:{title:"Color-picked 5-minute poem reset — Mind Space",desc:"Pick a color; get one short public-domain poem in original + your language.",
@@ -158,13 +156,14 @@
       $("orig").textContent = ""; $("tran").textContent = "";
       try{
         const p = await getOnlinePoem(mood, uiLang);
-        $("poemTitle").textContent = p.title;
+        // ▼ タイトルは翻訳版を優先（なければ原題）
+        $("poemTitle").textContent = (p.title_localized || p.title || "—");
         $("poemMeta").innerHTML = `${p.author} · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>`;
         $("orig").textContent = p.original || "";
         $("tran").textContent = p.translation || "";
       }catch(_e){
         const p = await getLocalPoem(mood, uiLang);
-        $("poemTitle").textContent = p.title + (uiLang==="ja" ? "（ローカル）" : " (local)");
+        $("poemTitle").textContent = (p.title || "—") + (uiLang==="ja" ? "（ローカル）" : " (local)");
         $("poemMeta").innerHTML = `${p.author}` + (p.source_url ? ` · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>` : "");
         $("orig").textContent = p.original || "";
         $("tran").textContent = p.translation || "";

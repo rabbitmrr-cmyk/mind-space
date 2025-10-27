@@ -46,9 +46,7 @@ Use a gentle, non-judgmental tone.</pre>
         <textarea id="userText" class="flex-1 rounded-lg border border-slate-200 p-3 focus:outline-none focus:ring-2 focus:ring-sky-200" rows="3" placeholder="例）最近、集中できない。"></textarea>
         <button id="sendBtn" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-white" aria-label="Send">AIに渡す</button>
       </div>
-      <div id="chat" class="mt-5 space-y-3">
-        <!-- Bubbles appear here -->
-      </div>
+      <div id="chat" class="mt-5 space-y-3"></div>
       <p class="text-[11px] text-slate-500 mt-3" id="privacyLine">このフォームは、サイトのAPIプロキシ（サーバレス）へ送信されます。個人情報は書かないでください。</p>
     </section>
 
@@ -64,7 +62,6 @@ Use a gentle, non-judgmental tone.</pre>
   <footer class="py-10 text-center text-xs text-slate-500" id="footer">© 2025 Mind Space Lab.</footer>
 
   <script>
-    // i18n
     const dict={
       ja:{title:"AIリフレーミング・ラボ",lead:"考えすぎた思考を、3行で整える。AIが「攻めずに補助線を引く」リフレーム法。",cardHead:"プロンプトカード",cardNote:"※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。",privacyLine:"このフォームは、サイトのAPIプロキシ（サーバレス）へ送信されます。個人情報は書かないでください。",exHead:"出力イメージ",toggle:"English"},
       en:{title:"AI Reframing Lab",lead:"Tidy overthinking into three lines. AI draws gentle helper lines:",cardHead:"Prompt Card",cardNote:"Type your concern below and hit “Send to AI”. The response follows the same intent.",privacyLine:"Your text is sent to a serverless API proxy. Please avoid personal data.",exHead:"Sample output",toggle:"日本語"}
@@ -74,7 +71,6 @@ Use a gentle, non-judgmental tone.</pre>
     function apply(){document.documentElement.lang=lang==='ja'?'ja':'en';t('title','title');t('lead','lead');t('cardHead','cardHead');t('cardNote','cardNote');t('privacyLine','privacyLine');t('exHead','exHead');$('langToggle').textContent=dict[lang].toggle; $('promptJa').classList.toggle('hidden', lang!=='ja'); $('promptEn').classList.toggle('hidden', lang!=='en');}
     apply();$('langToggle').addEventListener('click',()=>{lang=lang==='ja'?'en':'ja';apply();});
 
-    // Chat logic — calls your serverless proxy at /api/chat
     async function sendMessage() {
       const text=$('userText').value.trim();
       if(!text) return;

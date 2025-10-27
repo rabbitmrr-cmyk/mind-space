@@ -12,6 +12,12 @@
     h1,h2,h3,.font-display{font-family:var(--heading)}
     .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
     .bubble{border:1px solid rgba(15,23,42,.06);border-radius:14px;padding:.8rem 1rem;background:#fff}
+    .row{display:flex; gap:.6rem; align-items:flex-start; margin:.35rem 0;}
+    .label{flex:0 0 auto; font-size:.78rem; padding:.15rem .5rem; border-radius:.5rem; background:rgba(2,132,199,.10); color:rgb(2,132,199); border:1px solid rgba(2,132,199,.20)}
+    .text{flex:1; min-width:0}
+    details.prompt details, details.prompt summary { all: revert; }
+    details.prompt summary{cursor:pointer; font-size:.9rem}
+    .muted{color:#64748b}
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
@@ -25,69 +31,161 @@
     </div>
   </header>
 
-  <main class="mx-auto max-w-4xl px-4 py-10">
-    <h1 class="text-2xl font-semibold font-display" id="title">AIリフレーミング・ラボ</h1>
+  <main class="mx-auto max-w-4xl px-4 py-8 md:py-10">
+    <h1 class="text-2xl md:text-3xl font-semibold font-display" id="title">AIリフレーミング・ラボ</h1>
     <p class="text-slate-600 mt-2" id="lead">静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。</p>
 
-    <section class="card p-5 mt-6">
-      <h2 class="font-medium font-display mb-2" id="cardHead">プロンプトカード</h2>
-      <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50" id="promptJa">あなたは静かで丁寧なカウンセラーです。
-ユーザーの言葉を一度やさしく受けとめ、
-落ち着いた口調で「事実」「解釈」「別の見方」の3行で整理してください。
-言葉を選びながら、相手の気持ちに寄り添うように表現します。
-短くても、思いやりのある文体で構いません。
-最後の一文には、安心や希望を感じさせる小さな一言を添えてもかまいません。</pre>
-      <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50 mt-3 hidden" id="promptEn">You are a calm and gentle counselor.
-First, receive the user's words with empathy.
-Then answer in three lines — Fact, Interpretation, Alternative view.
-Use warm, thoughtful, unhurried language.
-A short reassuring closing line is welcome if it feels natural.</pre>
-      <p class="text-xs text-slate-500 mt-2" id="cardNote">※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。</p>
+    <!-- 使い方 -->
+    <section class="card p-5 mt-5">
+      <h2 class="font-medium font-display mb-2" id="howHead">使い方</h2>
+      <ol class="list-decimal pl-5 space-y-1 text-[0.95rem]" id="howList">
+        <li>いまの気持ちや状況を、1〜2文で入力します。</li>
+        <li>「AIに渡す」を押すと、<span class="underline">事実 / 解釈 / 別の見方</span>の3行にやさしく整理されます。</li>
+        <li>必要なら、もう一度短く書き直して試してみてください。少しずつ、視点がほぐれていきます。</li>
+      </ol>
+      <p class="text-xs muted mt-2" id="howNote">※ 個人情報は書かないでください。長文よりも「短く・要点だけ」の方が整いやすいです。</p>
     </section>
 
+    <!-- 入力＆会話 -->
     <section class="card p-5 mt-6">
       <div class="flex gap-2 items-end">
-        <textarea id="userText" class="flex-1 rounded-lg border border-slate-200 p-3 focus:outline-none focus:ring-2 focus:ring-sky-200" rows="3" placeholder="例）最近、集中できない。"></textarea>
+        <textarea id="userText" class="flex-1 rounded-lg border border-slate-200 p-3 focus:outline-none focus:ring-2 focus:ring-sky-200" rows="3" placeholder="例）最近、集中できない。短い時間でも落ち着ける方法が知りたい。"></textarea>
         <button id="sendBtn" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-white" aria-label="Send">AIに渡す</button>
       </div>
       <div id="chat" class="mt-5 space-y-3"></div>
       <p class="text-[11px] text-slate-500 mt-3" id="privacyLine">このフォームは、サイトのAPIプロキシ（Cloudflare Workers AI）へ送信されます。個人情報は書かないでください。</p>
     </section>
 
+    <!-- 出力イメージ -->
     <section class="mt-8">
       <h3 class="font-medium font-display mb-2" id="exHead">出力イメージ</h3>
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="bubble">事実：会議が続き、少し息が詰まっているようですね。<br/>解釈：集中できない自分を責めてしまっているのかもしれません。<br/>別の見方：短い休息で整い、精度は自然に戻るかもしれません。</div>
-        <div class="bubble">Fact: Meetings kept stacking, which can feel tight.<br/>Interpretation: You might be blaming yourself for the dip in focus.<br/>Alternative view: A brief pause may help, and accuracy could return naturally.</div>
+      <div class="bubble">
+        <div class="row"><span class="label" id="labFact">事実</span><span class="text">会議が続き、少し息が詰まっているようですね。</span></div>
+        <div class="row"><span class="label" id="labInterp">解釈</span><span class="text">集中できない自分を責めてしまっているのかもしれません。</span></div>
+        <div class="row"><span class="label" id="labAlt">別の見方</span><span class="text">短い休息で整い、精度は自然に戻るかもしれません。</span></div>
       </div>
+    </section>
+
+    <!-- プロンプトカード（控えめ・折りたたみ） -->
+    <section class="mt-10 card p-5">
+      <details class="prompt">
+        <summary id="promptSummary">プロンプトカード（確認用・折りたたみ）</summary>
+        <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50 mt-3" id="promptJa">あなたは静かで丁寧なカウンセラーです。
+ユーザーの言葉を一度やさしく受けとめ、
+落ち着いた口調で「事実」「解釈」「別の見方」の3行で整理してください。
+言葉を選びながら、相手の気持ちに寄り添うように表現します。
+短くても、思いやりのある文体で構いません。
+最後の一文には、安心や希望を感じさせる小さな一言を添えてもかまいません。</pre>
+        <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50 mt-3 hidden" id="promptEn">You are a calm and gentle counselor.
+First, receive the user's words with empathy.
+Then answer in three lines — Fact, Interpretation, Alternative view.
+Use warm, thoughtful, unhurried language.
+A short reassuring closing line is welcome if it feels natural.</pre>
+      </details>
     </section>
   </main>
 
   <footer class="py-10 text-center text-xs text-slate-500" id="footer">© 2025 Mind Space Lab.</footer>
 
   <script>
-    // i18n
-    const dict={ja:{title:"AIリフレーミング・ラボ",lead:"静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。",cardHead:"プロンプトカード",cardNote:"※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。",privacyLine:"このフォームは、サイトのAPIプロキシ（Cloudflare Workers AI）へ送信されます。個人情報は書かないでください。",exHead:"出力イメージ",toggle:"English"},en:{title:"AI Reframing Lab",lead:"Gentle counselor tone: soften overthinking into three lines.",cardHead:"Prompt Card",cardNote:"Type your concern and press “Send to AI”.",privacyLine:"Your text is sent to a Cloudflare Workers AI proxy. Avoid personal data.",exHead:"Sample output",toggle:"日本語"}};
-    const $=id=>document.getElementById(id);let lang="ja";
-    function t(id,key){ if($(id)) $(id).textContent=dict[lang][key]; }
-    function apply(){document.documentElement.lang=lang==='ja'?'ja':'en';t('title','title');t('lead','lead');t('cardHead','cardHead');t('cardNote','cardNote');t('privacyLine','privacyLine');t('exHead','exHead');$('langToggle').textContent=dict[lang].toggle; $('promptJa').classList.toggle('hidden', lang!=='ja'); $('promptEn').classList.toggle('hidden', lang!=='en');}
-    apply();$('langToggle').addEventListener('click',()=>{lang=lang==='ja'?'en':'ja';apply();});
+    // === i18n ===
+    const dict={
+      ja:{title:"AIリフレーミング・ラボ",lead:"静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。",howHead:"使い方",
+          howList:["いまの気持ちや状況を、1〜2文で入力します。","「AIに渡す」を押すと、事実 / 解釈 / 別の見方の3行にやさしく整理されます。","必要なら、もう一度短く書き直して試してみてください。少しずつ、視点がほぐれていきます。"],
+          howNote:"※ 個人情報は書かないでください。長文よりも「短く・要点だけ」の方が整いやすいです。",
+          exHead:"出力イメージ",promptSummary:"プロンプトカード（確認用・折りたたみ）",
+          labels:{fact:"事実", interp:"解釈", alt:"別の見方"},
+          toggle:"English"},
+      en:{title:"AI Reframing Lab",lead:"Gentle counselor tone: soften overthinking into three lines.",howHead:"How to use",
+          howList:["Write your feeling/situation in 1–2 sentences.","Tap “Send to AI” — it will shape it into three lines: Fact / Interpretation / Alternative view.","If needed, try again with a shorter, clearer sentence to gradually soften the view."],
+          howNote:"* Please avoid personal data. Short and simple inputs work best.",
+          exHead:"Sample output",promptSummary:"Prompt card (for reference)",
+          labels:{fact:"Fact", interp:"Interpretation", alt:"Alternative view"},
+          toggle:"日本語"}
+    };
+    const $=id=>document.getElementById(id); let lang="ja";
+    function setText(id, value){ if($(id)) $(id).textContent=value; }
+    function apply(){
+      document.documentElement.lang = lang==='ja'?'ja':'en';
+      setText('title', dict[lang].title);
+      setText('lead', dict[lang].lead);
+      setText('howHead', dict[lang].howHead);
+      // how list
+      const listEl = document.getElementById('howList'); listEl.innerHTML='';
+      dict[lang].howList.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; listEl.appendChild(li); });
+      setText('howNote', dict[lang].howNote);
+      setText('exHead', dict[lang].exHead);
+      setText('promptSummary', dict[lang].promptSummary);
+      // labels demo
+      setText('labFact', dict[lang].labels.fact);
+      setText('labInterp', dict[lang].labels.interp);
+      setText('labAlt', dict[lang].labels.alt);
+      // prompt toggle
+      $('promptJa').classList.toggle('hidden', lang!=='ja');
+      $('promptEn').classList.toggle('hidden', lang!=='en');
+      $('langToggle').textContent = dict[lang].toggle;
+    }
+    apply();
+    $('langToggle').addEventListener('click', ()=>{ lang = lang==='ja'?'en':'ja'; apply(); });
 
-    // Chat logic — calls Workers AI proxy
-    async function sendMessage() {
+    // === Chat logic (Workers AI endpoint) ===
+    const WORKER_URL = "https://floral-fire-c472.rabbitmrr.workers.dev/api/chat";
+
+    function escapeHTML(s){ return s.replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+    // Remove markdown bold/italics and normalize labels
+    function sanitizeMD(s){
+      // strip **bold** and *italics*
+      let out = s.replace(/\*\*/g,'').replace(/\*/g,'');
+      // also strip stray markdown code ticks
+      out = out.replace(/`/g,'');
+      return out;
+    }
+
+    // Try to parse into three lines; fallback to plain text
+    function formatReply(raw){
+      const labels = dict[lang].labels;
+      const cleaned = sanitizeMD(String(raw||'')).replace(/\r/g,'');
+      const lines = cleaned.split('\n').map(x=>x.trim()).filter(Boolean);
+
+      // Try to detect labeled lines
+      const map = { fact:null, interp:null, alt:null };
+      for(const line of lines){
+        if(/^(事実|fact)\s*[:：]/i.test(line)){ map.fact = line.replace(/^(事実|fact)\s*[:：]\s*/i,''); continue; }
+        if(/^(解釈|interpretation)\s*[:：]/i.test(line)){ map.interp = line.replace(/^(解釈|interpretation)\s*[:：]\s*/i,''); continue; }
+        if(/^(別の見方|alternative\s*(view|perspective))\s*[:：]/i.test(line)){ map.alt = line.replace(/^(別の見方|alternative\s*(view|perspective))\s*[:：]\s*/i,''); continue; }
+      }
+      // If labels not found, assume first 3 lines (or fewer)
+      if(!map.fact && lines[0]) map.fact = lines[0];
+      if(!map.interp && lines[1]) map.interp = lines[1];
+      if(!map.alt && lines[2]) map.alt = lines[2];
+
+      // Build HTML
+      const parts = [];
+      if(map.fact){ parts.push(`<div class="row"><span class="label">${labels.fact}</span><span class="text">${escapeHTML(map.fact)}</span></div>`); }
+      if(map.interp){ parts.push(`<div class="row"><span class="label">${labels.interp}</span><span class="text">${escapeHTML(map.interp)}</span></div>`); }
+      if(map.alt){ parts.push(`<div class="row"><span class="label">${labels.alt}</span><span class="text">${escapeHTML(map.alt)}</span></div>`); }
+
+      if(parts.length){
+        return `<div class="bubble">${parts.join('')}</div>`;
+      }
+      // Fallback
+      return `<div class="bubble">${escapeHTML(cleaned).replace(/\n/g,'<br/>')}</div>`;
+    }
+
+    async function sendMessage(){
       const text=$('userText').value.trim();
       if(!text) return;
-      $('chat').insertAdjacentHTML('beforeend', '<div class="bubble"><strong>YOU:</strong> '+ text.replace(/</g,'&lt;') +'</div>');
+      $('chat').insertAdjacentHTML('beforeend', `<div class="bubble"><strong>YOU:</strong> ${escapeHTML(text)}</div>`);
       $('userText').value='';
       $('sendBtn').disabled=true; $('sendBtn').textContent='…';
       try{
-        const res=await fetch('https://floral-fire-c472.rabbitmrr.workers.dev/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
+        const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
         const data=await res.json();
-        if(!res.ok) throw new Error(JSON.stringify(data));
-        const safe = String(data.reply||'').replace(/</g,'&lt;').replace(/\n/g,'<br/>');
-        $('chat').insertAdjacentHTML('beforeend', '<div class="bubble"><strong>AI:</strong> '+ safe +'</div>');
+        const html = res.ok ? formatReply(data.reply) : `<div class="bubble">通信に失敗しました。</div>`;
+        $('chat').insertAdjacentHTML('beforeend', html);
       }catch(e){
-        $('chat').insertAdjacentHTML('beforeend', '<div class="bubble">通信に失敗しました。しばらくしてからお試しください。</div>');
+        $('chat').insertAdjacentHTML('beforeend', `<div class="bubble">通信に失敗しました。しばらくしてからお試しください。</div>`);
       }finally{
         $('sendBtn').disabled=false; $('sendBtn').textContent= lang==='ja' ? 'AIに渡す' : 'Send to AI';
       }

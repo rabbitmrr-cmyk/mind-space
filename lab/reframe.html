@@ -58,10 +58,10 @@
     <!-- 出力イメージ -->
     <section class="mt-8">
       <h3 class="font-medium font-display mb-2" id="exHead">出力イメージ</h3>
-      <div class="bubble">
-        <div class="row"><span class="label" id="labFact">事実</span><span class="text">会議が続き、少し息が詰まっているようですね。</span></div>
-        <div class="row"><span class="label" id="labInterp">解釈</span><span class="text">集中できない自分を責めてしまっているのかもしれません。</span></div>
-        <div class="row"><span class="label" id="labAlt">別の見方</span><span class="text">短い休息で整い、精度は自然に戻るかもしれません。</span></div>
+      <div class="bubble" id="sampleOutput">
+        <div class="row"><span class="label" id="labFact">事実</span><span class="text" id="factText">会議が続き、少し息が詰まっているようですね。</span></div>
+        <div class="row"><span class="label" id="labInterp">解釈</span><span class="text" id="interpText">集中できない自分を責めてしまっているのかもしれません。</span></div>
+        <div class="row"><span class="label" id="labAlt">別の見方</span><span class="text" id="altText">短い休息で整い、精度は自然に戻るかもしれません。</span></div>
       </div>
     </section>
 
@@ -100,7 +100,12 @@ A short reassuring closing line is welcome if it feels natural.</pre>
         labels:{fact:"事実", interp:"解釈", alt:"別の見方"},
         toggle:"English",
         cta:"AIに渡す",
-        placeholder:"例）最近、集中できない。短い時間でも落ち着ける方法が知りたい。"
+        placeholder:"例）最近、集中できない。短い時間でも落ち着ける方法が知りたい。",
+        sample:{
+          fact:"会議が続き、少し息が詰まっているようですね。",
+          interp:"集中できない自分を責めてしまっているのかもしれません。",
+          alt:"短い休息で整い、精度は自然に戻るかもしれません。"
+        }
       },
       en:{
         title:"AI Reframing Lab",
@@ -112,9 +117,14 @@ A short reassuring closing line is welcome if it feels natural.</pre>
         privacyLine:"This form sends your text to a Cloudflare Workers AI proxy. Please avoid entering personal information.",
         promptSummary:"Prompt card (for reference)",
         labels:{fact:"Fact", interp:"Interpretation", alt:"Alternative view"},
-        toggle:"日本語",
+        toggle:"JP",
         cta:"Send to AI",
-        placeholder:"e.g. I’ve been losing focus lately. I’d like to find a short way to feel calm again."
+        placeholder:"e.g. I’ve been losing focus lately. I’d like to find a short way to feel calm again.",
+        sample:{
+          fact:"It sounds like the back-to-back meetings are leaving you a bit drained.",
+          interp:"You might be judging yourself for losing focus.",
+          alt:"Even a short pause can help you regain your calm and clarity."
+        }
       }
     };
 
@@ -139,7 +149,11 @@ A short reassuring closing line is welcome if it feels natural.</pre>
       $('promptEn').classList.toggle('hidden', lang!=='en');
       $('langToggle').textContent = dict[lang].toggle;
       $('sendBtn').textContent = dict[lang].cta;
-      $('userText').placeholder = dict[lang].placeholder; // ✅ プレースホルダー切替
+      $('userText').placeholder = dict[lang].placeholder;
+      // ✅ サンプル出力の切り替え
+      $('factText').textContent = dict[lang].sample.fact;
+      $('interpText').textContent = dict[lang].sample.interp;
+      $('altText').textContent = dict[lang].sample.alt;
     }
 
     apply();

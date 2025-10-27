@@ -12,7 +12,12 @@
   <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="x-default" />
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>.soft-shadow{box-shadow:0 8px 24px rgba(15,23,42,.06);}</style>
+  <style>
+    .soft-shadow{box-shadow:0 8px 24px rgba(15,23,42,.06);}
+    /* ▼ コンセプト用（押せない見た目） */
+    .feature img{opacity:.96}
+    .feature .pill{font-size:10px; letter-spacing:.06em}
+  </style>
 </head>
 
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
@@ -40,7 +45,7 @@
       </div>
       <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
         <h1 id="heroTitle" class="text-3xl md:text-5xl font-semibold leading-tight">AIでつくる心の余白</h1>
-        <p id="tagline" class="mt-4 text-slate-600 max-w-2xl">癒し・創造・内省のためのAI活用</p>
+        <p id="tagline" class="mt-4 text-slate-600 max-w-2xl">静かで未来的。透明感のある、癒し・創造・内省のためのAI活用</p>
         <p id="heroLead" class="mt-6 text-slate-700 max-w-2xl">AIを道具ではなく『余白をつくる伴走者』として使う。忙しさの間に、呼吸の入る余韻を。</p>
         <div class="mt-8">
           <a href="#hub" id="ctaSecondary" class="px-5 py-2 rounded-full border border-slate-300 hover:bg-white soft-shadow">体験とガイドを見る</a>
@@ -48,28 +53,40 @@
       </div>
     </section>
 
-    <!-- CONCEPT -->
+    <!-- CONCEPT（押せない情報ブロックにリデザイン） -->
     <section id="concept" class="mx-auto max-w-6xl px-4 py-14">
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="rounded-2xl border bg-white/70 p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" id="img1" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" alt="" />
-          <h3 id="p1Title" class="font-medium mb-2">癒し (Calm)</h3>
+      <div class="grid md:grid-cols-3 gap-10">
+        <!-- Calm -->
+        <div class="feature">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4"/>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="pill px-2 py-0.5 rounded-full bg-sky-100 text-sky-700">Calm</span>
+            <h3 id="p1Title" class="font-medium">癒し (Calm)</h3>
+          </div>
           <p id="p1Text" class="text-sm text-slate-600">瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。</p>
         </div>
-        <div class="rounded-2xl border bg-white/70 p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" id="img2" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" alt="" />
-          <h3 id="p2Title" class="font-medium mb-2">創造 (Create)</h3>
+        <!-- Create -->
+        <div class="feature">
+          <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" alt="" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4"/>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="pill px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Create</span>
+            <h3 id="p2Title" class="font-medium">創造 (Create)</h3>
+          </div>
           <p id="p2Text" class="text-sm text-slate-600">言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。</p>
         </div>
-        <div class="rounded-2xl border bg-white/70 p-6 soft-shadow">
-          <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" id="img3" class="w-full aspect-[4/3] object-cover rounded-xl mb-4" alt="" />
-          <h3 id="p3Title" class="font-medium mb-2">内省 (Reflect)</h3>
+        <!-- Reflect -->
+        <div class="feature">
+          <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" alt="" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4"/>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="pill px-2 py-0.5 rounded-full bg-violet-100 text-violet-700">Reflect</span>
+            <h3 id="p3Title" class="font-medium">内省 (Reflect)</h3>
+          </div>
           <p id="p3Text" class="text-sm text-slate-600">日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。</p>
         </div>
       </div>
     </section>
 
-    <!-- HUB（体験+ガイド） -->
+    <!-- HUB（体験+ガイド：押せるカードのまま） -->
     <section id="hub" class="mx-auto max-w-6xl px-4 py-14">
       <h2 id="hubTitle" class="text-xl font-semibold mb-6">体験とガイド</h2>
       <div class="grid md:grid-cols-4 gap-6">
@@ -116,11 +133,11 @@
         heroTitle:"AIでつくる心の余白",tagline:"静かで未来的。透明感のある、癒し・創造・内省のためのAI活用",
         heroLead:"AIを道具ではなく『余白をつくる伴走者』として使う。忙しさの間に、呼吸の入る余韻を。",
         ctaSecondary:"体験とガイドを見る",
-        p1Title:"癒し (Calm)",p1Text:"瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。",
-        p2Title:"創造 (Create)",p2Text:"言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。",
-        p3Title:"内省 (Reflect)",p3Text:"日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。",
+        p1Title:"癒し",p1Text:"瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。",
+        p2Title:"創造",p2Text:"言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。",
+        p3Title:"内省",p3Text:"日々の気づきをためるリフレクション・テンプレートと、週次振り返りの設計。",
         hubTitle:"体験とガイド",
-        cardPoem:"色で選ぶ詩リセット",cardPoemDesc:"RGBパレットで色（ムード）を選ぶと、公有の詩を原文＋あなたの言語で。",
+        cardPoem:"色で選ぶ詩リセット",cardPoemDesc:"RGBパレットで色（ムード）を選ぶと、世界の詩を原文＋あなたの言語で。",
         cardReframe:"AIリフレーミング・ラボ（3行で整える）",cardReframeDesc:"短い言葉で心の整理を促す、静かで丁寧なカウンセラー風の対話。",
         cardSound:"3分サウンドで整える",cardSoundDesc:"やさしい音（ソフトトーン/ブラウンノイズ/雨）で、3分の切り替え。",
         cardWp:"深呼吸を思い出す壁紙",cardWpDesc:"静かな写真を配布。デスクトップでひと呼吸の合図に。",
@@ -140,7 +157,7 @@
         cardReframe:"AI Reframing Lab (3-line reflection)",cardReframeDesc:"A soft, counselor-like dialogue to gently reorganize thoughts.",
         cardSound:"3-minute soundscape",cardSoundDesc:"Soft tone / brown noise / rain — a 3-minute switch.",
         cardWp:"Wallpaper for mindful breathing",cardWpDesc:"Quiet images to set as your desktop and remember to pause.",
-        footer:"© 2025 Mind Space with AI. All rights reserved.",toggle:"日本語"
+        footer:"© 2025 Mind Space with AI. All rights reserved.",toggle:"JP"
       }
     };
 

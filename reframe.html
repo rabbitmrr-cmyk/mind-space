@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>AIリフレーミング・ラボ — Mind Space</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {--heading: 'Playfair Display', serif; --body: 'Noto Sans JP', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;}
+    body{font-family:var(--body)}
+    h1,h2,h3,.font-display{font-family:var(--heading)}
+    .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .bubble{border:1px solid rgba(15,23,42,.06);border-radius:14px;padding:.8rem 1rem;background:#fff}
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
+  <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/50 bg-white/30 border-b border-slate-200/40">
+    <div class="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-3 hover:opacity-80">
+        <div class="h-7 w-7 rounded-2xl bg-gradient-to-br from-sky-200/70 via-indigo-200/70 to-cyan-200/70"></div>
+        <span id="brand" class="font-medium tracking-wide font-display">Mind Space Lab</span>
+      </a>
+      <button id="langToggle" class="text-xs px-3 py-1 rounded-full border border-slate-200 hover:bg-white">English</button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-4xl px-4 py-10">
+    <h1 class="text-2xl font-semibold font-display" id="title">AIリフレーミング・ラボ</h1>
+    <p class="text-slate-600 mt-2" id="lead">静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。</p>
+
+    <section class="card p-5 mt-6">
+      <h2 class="font-medium font-display mb-2" id="cardHead">プロンプトカード</h2>
+      <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50" id="promptJa">あなたは静かで丁寧なカウンセラーです。
+ユーザーの言葉を一度やさしく受けとめ、
+落ち着いた口調で「事実」「解釈」「別の見方」の3行で整理してください。
+言葉を選びながら、相手の気持ちに寄り添うように表現します。
+短くても、思いやりのある文体で構いません。
+最後の一文には、安心や希望を感じさせる小さな一言を添えてもかまいません。</pre>
+      <pre class="text-sm whitespace-pre-wrap p-3 bg-white/80 rounded-lg border border-slate-200/50 mt-3 hidden" id="promptEn">You are a calm and gentle counselor.
+First, receive the user's words with empathy.
+Then answer in three lines — Fact, Interpretation, Alternative view.
+Use warm, thoughtful, unhurried language.
+A short reassuring closing line is welcome if it feels natural.</pre>
+      <p class="text-xs text-slate-500 mt-2" id="cardNote">※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。</p>
+    </section>
+
+    <section class="card p-5 mt-6">
+      <div class="flex gap-2 items-end">
+        <textarea id="userText" class="flex-1 rounded-lg border border-slate-200 p-3 focus:outline-none focus:ring-2 focus:ring-sky-200" rows="3" placeholder="例）最近、集中できない。"></textarea>
+        <button id="sendBtn" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-white" aria-label="Send">AIに渡す</button>
+      </div>
+      <div id="chat" class="mt-5 space-y-3"></div>
+      <p class="text-[11px] text-slate-500 mt-3" id="privacyLine">このフォームは、サイトのAPIプロキシ（Cloudflare Workers AI）へ送信されます。個人情報は書かないでください。</p>
+    </section>
+
+    <section class="mt-8">
+      <h3 class="font-medium font-display mb-2" id="exHead">出力イメージ</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bubble">事実：会議が続き、少し息が詰まっているようですね。<br/>解釈：集中できない自分を責めてしまっているのかもしれません。<br/>別の見方：短い休息で整い、精度は自然に戻るかもしれません。</div>
+        <div class="bubble">Fact: Meetings kept stacking, which can feel tight.<br/>Interpretation: You might be blaming yourself for the dip in focus.<br/>Alternative view: A brief pause may help, and accuracy could return naturally.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-10 text-center text-xs text-slate-500" id="footer">© 2025 Mind Space Lab.</footer>
+
+  <script>
+    // i18n
+    const dict={ja:{title:"AIリフレーミング・ラボ",lead:"静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。",cardHead:"プロンプトカード",cardNote:"※ 下の入力欄に悩みを書いて「AIに渡す」を押すと、同等の意図で応答します。",privacyLine:"このフォームは、サイトのAPIプロキシ（Cloudflare Workers AI）へ送信されます。個人情報は書かないでください。",exHead:"出力イメージ",toggle:"English"},en:{title:"AI Reframing Lab",lead:"Gentle counselor tone: soften overthinking into three lines.",cardHead:"Prompt Card",cardNote:"Type your concern and press “Send to AI”.",privacyLine:"Your text is sent to a Cloudflare Workers AI proxy. Avoid personal data.",exHead:"Sample output",toggle:"日本語"}};
+    const $=id=>document.getElementById(id);let lang="ja";
+    function t(id,key){ if($(id)) $(id).textContent=dict[lang][key]; }
+    function apply(){document.documentElement.lang=lang==='ja'?'ja':'en';t('title','title');t('lead','lead');t('cardHead','cardHead');t('cardNote','cardNote');t('privacyLine','privacyLine');t('exHead','exHead');$('langToggle').textContent=dict[lang].toggle; $('promptJa').classList.toggle('hidden', lang!=='ja'); $('promptEn').classList.toggle('hidden', lang!=='en');}
+    apply();$('langToggle').addEventListener('click',()=>{lang=lang==='ja'?'en':'ja';apply();});
+
+    // Chat logic — calls Workers AI proxy
+    async function sendMessage() {
+      const text=$('userText').value.trim();
+      if(!text) return;
+      $('chat').insertAdjacentHTML('beforeend', '<div class="bubble"><strong>YOU:</strong> '+ text.replace(/</g,'&lt;') +'</div>');
+      $('userText').value='';
+      $('sendBtn').disabled=true; $('sendBtn').textContent='…';
+      try{
+        const res=await fetch('https://floral-fire-c472.rabbitmrr.workers.dev/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
+        const data=await res.json();
+        if(!res.ok) throw new Error(JSON.stringify(data));
+        const safe = String(data.reply||'').replace(/</g,'&lt;').replace(/\n/g,'<br/>');
+        $('chat').insertAdjacentHTML('beforeend', '<div class="bubble"><strong>AI:</strong> '+ safe +'</div>');
+      }catch(e){
+        $('chat').insertAdjacentHTML('beforeend', '<div class="bubble">通信に失敗しました。しばらくしてからお試しください。</div>');
+      }finally{
+        $('sendBtn').disabled=false; $('sendBtn').textContent= lang==='ja' ? 'AIに渡す' : 'Send to AI';
+      }
+    }
+    $('sendBtn').addEventListener('click', sendMessage);
+  </script>
+</body>
+</html>

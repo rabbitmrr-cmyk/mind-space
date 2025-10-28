@@ -20,16 +20,17 @@
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
-  <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/50 bg-white/30 border-b border-slate-200/40">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/30 border-b border-slate-200/40">
     <div class="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between">
-      <a href="../index.html" class="flex items-center gap-3 hover:opacity-80">
-        <div class="h-7 w-7 rounded-2xl bg-gradient-to-br from-sky-200/70 via-indigo-200/70 to-cyan-200/70"></div>
-        <span id="brand" class="font-medium tracking-wide font-display">Mind Space Lab</span>
-      </a>
+      <!-- ← ホームへ戻る（左上に統一） -->
+      <a id="backLink" href="#" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
       <button id="langToggle" class="text-xs px-3 py-1 rounded-full border border-slate-200 hover:bg-white">English</button>
     </div>
   </header>
 
+  <!-- MAIN -->
   <main class="mx-auto max-w-4xl px-4 py-8 md:py-10">
     <h1 class="text-2xl md:text-3xl font-semibold font-display" id="title">AIリフレーミング・ラボ</h1>
     <p class="text-slate-600 mt-2" id="lead">静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。</p>
@@ -65,7 +66,7 @@
       </div>
     </section>
 
-    <!-- プロンプトカード（折りたたみ） -->
+    <!-- プロンプトカード -->
     <section class="mt-10 card p-5">
       <details class="prompt">
         <summary id="promptSummary">プロンプトカード（確認用・折りたたみ）</summary>
@@ -87,123 +88,69 @@ A short reassuring closing line is welcome if it feels natural.</pre>
   <footer class="py-10 text-center text-xs text-slate-500" id="footer">© 2025 Mind Space Lab.</footer>
 
   <script>
-    const dict={
-      ja:{
-        title:"AIリフレーミング・ラボ",
-        lead:"静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。",
-        howHead:"使い方",
-        howList:["いまの気持ちや状況を、1〜2文で入力します。","「AIに渡す」を押すと、事実 / 解釈 / 別の見方の3行にやさしく整理されます。","必要なら、もう一度短く書き直して試してみてください。少しずつ、視点がほぐれていきます。"],
-        howNote:"※ 個人情報は書かないでください。長文よりも「短く・要点だけ」の方が整いやすいです。",
-        exHead:"出力イメージ",
-        privacyLine:"このフォームは、サイトのAPIプロキシ（Cloudflare Workers AI）へ送信されます。個人情報は書かないでください。",
-        promptSummary:"プロンプトカード（確認用・折りたたみ）",
-        labels:{fact:"事実", interp:"解釈", alt:"別の見方"},
-        toggle:"English",
-        cta:"AIに渡す",
-        placeholder:"例）最近、集中できない。短い時間でも落ち着ける方法が知りたい。",
-        sample:{
-          fact:"会議が続き、少し息が詰まっているようですね。",
-          interp:"集中できない自分を責めてしまっているのかもしれません。",
-          alt:"短い休息で整い、精度は自然に戻るかもしれません。"
+    // GitHub Pages / Netlify 両対応
+    const isGitHub = location.hostname.endsWith("github.io");
+    const BASE = isGitHub ? "/mind-space" : "";
+
+    const dict = {
+      ja: {
+        back: "ホームへ戻る",
+        title: "AIリフレーミング・ラボ",
+        lead: "静かで丁寧なカウンセラー風の応答で、考えすぎを3行にそっと整えます。",
+        toggle: "English",
+        cta: "AIに渡す",
+        placeholder: "例）最近、集中できない。短い時間でも落ち着ける方法が知りたい。",
+        labels: { fact: "事実", interp: "解釈", alt: "別の見方" },
+        sample: {
+          fact: "会議が続き、少し息が詰まっているようですね。",
+          interp: "集中できない自分を責めてしまっているのかもしれません。",
+          alt: "短い休息で整い、精度は自然に戻るかもしれません。"
         }
       },
-      en:{
-        title:"AI Reframing Lab",
-        lead:"Gentle counselor tone: soften overthinking into three lines.",
-        howHead:"How to use",
-        howList:["Write your feeling/situation in 1–2 sentences.","Tap “Send to AI” — it will shape it into three lines: Fact / Interpretation / Alternative view.","If needed, try again with a shorter, clearer sentence to gradually soften the view."],
-        howNote:"* Please avoid personal data. Short and simple inputs work best.",
-        exHead:"Sample output",
-        privacyLine:"This form sends your text to a Cloudflare Workers AI proxy. Please avoid entering personal information.",
-        promptSummary:"Prompt card (for reference)",
-        labels:{fact:"Fact", interp:"Interpretation", alt:"Alternative view"},
-        toggle:"JP",
-        cta:"Send to AI",
-        placeholder:"e.g. I’ve been losing focus lately. I’d like to find a short way to feel calm again.",
-        sample:{
-          fact:"It sounds like the back-to-back meetings are leaving you a bit drained.",
-          interp:"You might be judging yourself for losing focus.",
-          alt:"Even a short pause can help you regain your calm and clarity."
+      en: {
+        back: "Back to Home",
+        title: "AI Reframing Lab",
+        lead: "Gentle counselor tone: soften overthinking into three lines.",
+        toggle: "JP",
+        cta: "Send to AI",
+        placeholder: "e.g. I’ve been losing focus lately. I’d like to find a short way to feel calm again.",
+        labels: { fact: "Fact", interp: "Interpretation", alt: "Alternative view" },
+        sample: {
+          fact: "It sounds like the back-to-back meetings are leaving you a bit drained.",
+          interp: "You might be judging yourself for losing focus.",
+          alt: "Even a short pause can help you regain your calm and clarity."
         }
       }
     };
 
-    const $=id=>document.getElementById(id); let lang="ja";
-    function setText(id, value){ if($(id)) $(id).textContent=value; }
+    const $ = id => document.getElementById(id);
+    let lang = "ja";
+    function apply() {
+      const d = dict[lang];
+      $("back").textContent = d.back;
+      $("title").textContent = d.title;
+      $("lead").textContent = d.lead;
+      $("langToggle").textContent = d.toggle;
+      $("sendBtn").textContent = d.cta;
+      $("userText").placeholder = d.placeholder;
+      $("labFact").textContent = d.labels.fact;
+      $("labInterp").textContent = d.labels.interp;
+      $("labAlt").textContent = d.labels.alt;
+      $("factText").textContent = d.sample.fact;
+      $("interpText").textContent = d.sample.interp;
+      $("altText").textContent = d.sample.alt;
 
-    function apply(){
-      document.documentElement.lang = lang==='ja'?'ja':'en';
-      setText('title', dict[lang].title);
-      setText('lead', dict[lang].lead);
-      setText('howHead', dict[lang].howHead);
-      const listEl = document.getElementById('howList'); listEl.innerHTML='';
-      dict[lang].howList.forEach(t=>{ const li=document.createElement('li'); li.textContent=t; listEl.appendChild(li); });
-      setText('howNote', dict[lang].howNote);
-      setText('exHead', dict[lang].exHead);
-      setText('privacyLine', dict[lang].privacyLine);
-      setText('promptSummary', dict[lang].promptSummary);
-      setText('labFact', dict[lang].labels.fact);
-      setText('labInterp', dict[lang].labels.interp);
-      setText('labAlt', dict[lang].labels.alt);
-      $('promptJa').classList.toggle('hidden', lang!=='ja');
-      $('promptEn').classList.toggle('hidden', lang!=='en');
-      $('langToggle').textContent = dict[lang].toggle;
-      $('sendBtn').textContent = dict[lang].cta;
-      $('userText').placeholder = dict[lang].placeholder;
-      // ✅ サンプル出力の切り替え
-      $('factText').textContent = dict[lang].sample.fact;
-      $('interpText').textContent = dict[lang].sample.interp;
-      $('altText').textContent = dict[lang].sample.alt;
+      // ホームへのリンクを動的設定
+      const url = BASE + "/" + (lang === "en" ? "?lang=en" : "");
+      $("backLink").setAttribute("href", url);
     }
+
+    $("langToggle").addEventListener("click", () => {
+      lang = lang === "ja" ? "en" : "ja";
+      apply();
+    });
 
     apply();
-    $('langToggle').addEventListener('click', ()=>{ lang = lang==='ja'?'en':'ja'; apply(); });
-
-    const WORKER_URL = "https://floral-fire-c472.rabbitmrr.workers.dev/api/chat";
-
-    function escapeHTML(s){ return s.replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
-
-    function sanitizeMD(s){ return s.replace(/\*\*/g,'').replace(/\*/g,'').replace(/`/g,''); }
-
-    function formatReply(raw){
-      const labels = dict[lang].labels;
-      const cleaned = sanitizeMD(String(raw||'')).replace(/\r/g,'');
-      const lines = cleaned.split('\n').map(x=>x.trim()).filter(Boolean);
-      const map = { fact:null, interp:null, alt:null };
-      for(const line of lines){
-        if(/^(事実|fact)\s*[:：]/i.test(line)){ map.fact = line.replace(/^(事実|fact)\s*[:：]\s*/i,''); continue; }
-        if(/^(解釈|interpretation)\s*[:：]/i.test(line)){ map.interp = line.replace(/^(解釈|interpretation)\s*[:：]\s*/i,''); continue; }
-        if(/^(別の見方|alternative\s*(view|perspective))\s*[:：]/i.test(line)){ map.alt = line.replace(/^(別の見方|alternative\s*(view|perspective))\s*[:：]\s*/i,''); continue; }
-      }
-      if(!map.fact && lines[0]) map.fact = lines[0];
-      if(!map.interp && lines[1]) map.interp = lines[1];
-      if(!map.alt && lines[2]) map.alt = lines[2];
-      const parts = [];
-      if(map.fact){ parts.push(`<div class="row"><span class="label">${labels.fact}</span><span class="text">${escapeHTML(map.fact)}</span></div>`); }
-      if(map.interp){ parts.push(`<div class="row"><span class="label">${labels.interp}</span><span class="text">${escapeHTML(map.interp)}</span></div>`); }
-      if(map.alt){ parts.push(`<div class="row"><span class="label">${labels.alt}</span><span class="text">${escapeHTML(map.alt)}</span></div>`); }
-      return `<div class="bubble">${parts.join('')}</div>`;
-    }
-
-    async function sendMessage(){
-      const text=$('userText').value.trim();
-      if(!text) return;
-      $('chat').insertAdjacentHTML('beforeend', `<div class="bubble"><strong>YOU:</strong> ${escapeHTML(text)}</div>`);
-      $('userText').value='';
-      $('sendBtn').disabled=true; $('sendBtn').textContent='…';
-      try{
-        const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:text,lang})});
-        const data=await res.json();
-        const html = res.ok ? formatReply(data.reply) : `<div class="bubble">通信に失敗しました。</div>`;
-        $('chat').insertAdjacentHTML('beforeend', html);
-      }catch(e){
-        $('chat').insertAdjacentHTML('beforeend', `<div class="bubble">通信に失敗しました。しばらくしてからお試しください。</div>`);
-      }finally{
-        $('sendBtn').disabled=false;
-        $('sendBtn').textContent = dict[lang].cta;
-      }
-    }
-    $('sendBtn').addEventListener('click', sendMessage);
   </script>
 </body>
 </html>

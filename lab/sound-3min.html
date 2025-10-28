@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>3分サウンド — Mind Space</title>
-  <meta name="description" content="やさしい合成音のサウンドスケープ。海・雨・ブラウンノイズ・ソフトトーン・鳥のさえずり・やさしい音楽。±で配分調整、3分タイマー付き。"/>
+  <meta name="description" content="耳にやさしい短いサウンドスケープ。雨・ブラウンノイズ・小鳥・温かいチャイム。±で配分とチャイム間隔を調整、3分タイマー付き。"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
@@ -28,7 +28,7 @@
 
   <main class="mx-auto max-w-4xl px-4 pb-16">
     <h1 class="text-2xl md:text-3xl font-semibold mt-6" id="h1">3分サウンド</h1>
-    <p class="mt-2 text-slate-600" id="lead">やさしい合成音のサウンドスケープ。各要素の配分は±で微調整できます。</p>
+    <p class="mt-2 text-slate-600" id="lead">耳にやさしい短いサウンドのみ（雨／ブラウンノイズ／小鳥／ぽーんと鳴るチャイム）。±で配分とチャイム間隔を調整できます。</p>
 
     <!-- プレイヤー -->
     <section class="card p-5 mt-4">
@@ -52,72 +52,66 @@
       <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
         <span class="text-slate-600" id="presetLabel">プリセット:</span>
         <button class="chip active" data-preset="calm">落ち着き</button>
-        <button class="chip" data-preset="sea">海辺</button>
-        <button class="chip" data-preset="rain">雨音</button>
+        <button class="chip" data-preset="rain">雨</button>
         <button class="chip" data-preset="focus">集中</button>
         <button class="chip" data-preset="birds">小鳥</button>
-        <button class="chip" data-preset="music">やさしい音楽</button>
+        <button class="chip" data-preset="chime">チャイム中心</button>
       </div>
 
       <!-- ミキサー -->
       <div class="mt-4 grid gap-2">
         <!-- ラベル / - / + / Mute / 値 -->
         <div class="row">
-          <div>海</div>
-          <button class="btn" data-dec="ocean">−</button>
-          <button class="btn" data-inc="ocean">＋</button>
-          <button class="btn" data-mute="ocean">Mute</button>
-          <div class="mono text-right"><span id="oceanVal">20</span>%</div>
-        </div>
-        <div class="row">
-          <div>雨</div>
+          <div>雨（しとしと）</div>
           <button class="btn" data-dec="rain">−</button>
           <button class="btn" data-inc="rain">＋</button>
           <button class="btn" data-mute="rain">Mute</button>
           <div class="mono text-right"><span id="rainVal">30</span>%</div>
         </div>
         <div class="row">
-          <div>ブラウンノイズ</div>
+          <div>ブラウンノイズ（遠い空調のように）</div>
           <button class="btn" data-dec="brown">−</button>
           <button class="btn" data-inc="brown">＋</button>
           <button class="btn" data-mute="brown">Mute</button>
-          <div class="mono text-right"><span id="brownVal">30</span>%</div>
+          <div class="mono text-right"><span id="brownVal">25</span>%</div>
         </div>
         <div class="row">
-          <div>ソフトトーン</div>
-          <button class="btn" data-dec="tone">−</button>
-          <button class="btn" data-inc="tone">＋</button>
-          <button class="btn" data-mute="tone">Mute</button>
-          <div class="mono text-right"><span id="toneVal">10</span>%</div>
-        </div>
-        <div class="row">
-          <div>小鳥</div>
+          <div>小鳥（たまに鳴く）</div>
           <button class="btn" data-dec="birds">−</button>
           <button class="btn" data-inc="birds">＋</button>
           <button class="btn" data-mute="birds">Mute</button>
           <div class="mono text-right"><span id="birdsVal">10</span>%</div>
         </div>
         <div class="row">
-          <div>静かな和音</div>
-          <button class="btn" data-dec="music">−</button>
-          <button class="btn" data-inc="music">＋</button>
-          <button class="btn" data-mute="music">Mute</button>
-          <div class="mono text-right"><span id="musicVal">10</span>%</div>
+          <div>チャイム（温かい “ぽーん”）</div>
+          <button class="btn" data-dec="chime">−</button>
+          <button class="btn" data-inc="chime">＋</button>
+          <button class="btn" data-mute="chime">Mute</button>
+          <div class="mono text-right"><span id="chimeVal">15</span>%</div>
         </div>
+      </div>
+
+      <!-- チャイム間隔 -->
+      <div class="mt-4 grid gap-2" style="grid-template-columns:auto auto auto auto 1fr;">
+        <div class="text-sm">チャイム間隔</div>
+        <button class="btn" id="chimeSlow">−</button>
+        <button class="btn" id="chimeFast">＋</button>
+        <button class="btn" id="chimeOnce">今すぐ鳴らす</button>
+        <div class="mono text-right text-sm"><span id="chimeInfo">約 5–8 秒に1回</span></div>
       </div>
     </section>
   </main>
 
   <script>
-    /* ===== base path for Home ===== */
+    /* ===== Home link base ===== */
     const isGitHubPages = location.hostname.endsWith('github.io');
     const BASE = isGitHubPages ? '/mind-space' : '';
     document.getElementById('homeLink').href = BASE + '/';
 
     /* ===== i18n (簡易) ===== */
     const dict = {
-      ja:{h1:"3分サウンド",lead:"やさしい合成音のサウンドスケープ。各要素の配分は±で微調整できます。",dur:"時間",preset:"プリセット:",play:"▶ 再生",stop:"■ 停止"},
-      en:{h1:"3-minute soundscape",lead:"Gentle synthesized ambience. Adjust each layer with ± mix controls.",dur:"Duration",preset:"Presets:",play:"▶ Play",stop:"■ Stop"}
+      ja:{h1:"3分サウンド",lead:"耳にやさしい短いサウンドのみ（雨／ブラウンノイズ／小鳥／ぽーんと鳴るチャイム）。±で配分とチャイム間隔を調整できます。",dur:"時間",preset:"プリセット:",play:"▶ 再生",stop:"■ 停止",chimeNow:"今すぐ鳴らす",chimeLabel:(lo,hi)=>`約 ${lo}–${hi} 秒に1回`},
+      en:{h1:"3-minute soundscape",lead:"Only gentle, short sounds (rain / brown noise / birds / warm chime). Adjust mix and chime interval with ±.",dur:"Duration",preset:"Presets:",play:"▶ Play",stop:"■ Stop",chimeNow:"Chime now",chimeLabel:(lo,hi)=>`every ~${lo}-${hi}s`}
     };
     const $ = id => document.getElementById(id);
     let ui = navigator.language?.startsWith('en') ? 'en' : 'ja';
@@ -129,23 +123,26 @@
       $('play').textContent = dict[ui].play;
       $('stop').textContent = dict[ui].stop;
       $('lang').textContent = (ui==='ja'?'English':'日本語');
+      $('chimeOnce').textContent = dict[ui].chimeNow;
+      $('chimeInfo').textContent = dict[ui].chimeLabel(chimeRange.lo, chimeRange.hi);
       document.documentElement.lang = ui;
     }
     $('lang').addEventListener('click', ()=>{ ui = (ui==='ja'?'en':'ja'); applyUI(); });
+    const chimeRange = {lo:5, hi:8};
     applyUI();
 
-    /* ===== Web Audio Synth ===== */
+    /* ===== Web Audio Core ===== */
     let ctx, master, running=false, endAt=0, rafId=null;
 
+    // ミキサー状態（初期値は穏やかに）
     const state = {
-      ocean: 20, rain: 30, brown: 30, tone: 10, birds: 10, music: 10,
-      mute: {ocean:false,rain:false,brown:false,tone:false,birds:false,music:false}
+      rain: 30, brown: 25, birds: 10, chime: 15,
+      mute: {rain:false,brown:false,birds:false,chime:false}
     };
-
     const nodes = {
-      ocean: null, rain: null, brown: null, tone: null,
+      rain: null, brown: null,
       birds: {gain:null, timers:[]},
-      music: {gain:null, timers:[], chordIndex:0}
+      chime: {gain:null, timer:null}
     };
 
     function clamp(v){ return Math.max(0, Math.min(100, v)); }
@@ -160,31 +157,6 @@
       }
     }
 
-    // Utility: noise source
-    function createNoise(type='white'){
-      const bufferSize = 2 * ctx.sampleRate;
-      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0;
-      for(let i=0; i<bufferSize; i++){
-        const white = Math.random()*2-1;
-        if(type==='brown'){
-          data[i] = (lastOut + 0.02 * white) / 1.02;
-          lastOut = data[i];
-          data[i] *= 3.5; // gain
-        } else if(type==='pink'){
-          // Voss-McCartney-ish
-          data[i] = data[i-1] ? (data[i-1]*0.997 + white*0.003) : white;
-        } else {
-          data[i] = white;
-        }
-      }
-      const src = ctx.createBufferSource();
-      src.buffer = buffer;
-      src.loop = true;
-      return src;
-    }
-
     function makeGain(vol=0){
       const g = ctx.createGain();
       g.gain.value = vol;
@@ -192,166 +164,149 @@
       return g;
     }
 
-    // Ocean: pink noise -> dual filters + slow AM (swell) + random gusts
-    function startOcean(){
-      const pink = createNoise('pink');
-      const g = makeGain(state.mute.ocean?0:state.ocean/100);
-      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=600; lp.Q.value=0.5;
-      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=80; hp.Q.value=0.7;
-      pink.connect(lp).connect(hp).connect(g);
-
-      // Swell: slow LFO to simulate waves
-      const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value = 0.08 + Math.random()*0.04;
-      const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.5; // depth
-      lfo.connect(lfoGain).connect(g.gain);
-      // Bias so it ebbs-and-flows around current level
-      const base = g.gain.value;
-      const bias = ctx.createConstantSource(); bias.offset.value = base;
-      const sum = ctx.createGain(); sum.gain.value=1;
-      bias.connect(sum); lfoGain.connect(sum);
-      sum.connect(g.gain);
-      bias.start(); lfo.start(); pink.start();
-
-      nodes.ocean = g; nodes.oceanSrc = pink; nodes.oceanLfo = lfo; nodes.oceanBias = bias; nodes.oceanSum=sum;
+    function createNoise(type='white'){
+      const bufferSize = 2 * ctx.sampleRate;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let lastOut = 0;
+      for(let i=0;i<bufferSize;i++){
+        const white = Math.random()*2-1;
+        if(type==='brown'){
+          data[i] = (lastOut + 0.02*white)/1.02; lastOut = data[i]; data[i] *= 3.5;
+        } else {
+          data[i] = white;
+        }
+      }
+      const src = ctx.createBufferSource();
+      src.buffer = buffer; src.loop = true;
+      return src;
     }
 
-    // Rain: white noise -> highpass + gentle shelf, light random flutter
+    /* ===== 音源 ===== */
+
+    // 雨：高域ホワイトノイズをややローパスで柔らかく（常時鳴らしつつ小音量）
     function startRain(){
       const white = createNoise('white');
       const g = makeGain(state.mute.rain?0:state.rain/100);
-      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=4000; hp.Q.value=0.7;
-      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=12000; lp.Q.value=0.2;
-      white.connect(hp).connect(lp).connect(g);
-      // subtle flutter
-      const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.6;
-      const lfoGain = ctx.createGain(); lfoGain.gain.value=0.15;
-      lfo.connect(lfoGain).connect(g.gain); lfo.start(); white.start();
-
-      nodes.rain = g; nodes.rainSrc=white; nodes.rainLfo=lfo; nodes.rainLfog=lfoGain;
+      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=3000; hp.Q.value=0.6;
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass';  lp.frequency.value=9000;  lp.Q.value=0.2;
+      white.connect(hp).connect(lp).connect(g); white.start();
+      nodes.rain = g; nodes.rainSrc=white;
     }
 
-    // Brown noise (very low, HVAC-like)
+    // ブラウンノイズ：低域寄りの空調感（常時だが控えめ）
     function startBrown(){
       const brown = createNoise('brown');
       const g = makeGain(state.mute.brown?0:state.brown/100);
-      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=500; lp.Q.value=0.2;
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=600; lp.Q.value=0.2;
       brown.connect(lp).connect(g); brown.start();
       nodes.brown = g; nodes.brownSrc=brown;
     }
 
-    // Soft tone: two close sines (binaural-ish beating)
-    function startTone(){
-      const g = makeGain(state.mute.tone?0:state.tone/100);
-      const o1 = ctx.createOscillator(); o1.type='sine'; o1.frequency.value=396;
-      const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.value=401.2; // gentle beat
-      o1.connect(g); o2.connect(g);
-      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1200; lp.Q.value=0.1;
-      g.connect(lp); lp.connect(master);
-      o1.start(); o2.start();
-      nodes.tone = g; nodes.toneLP=lp; nodes.toneO1=o1; nodes.toneO2=o2;
-    }
-
-    // Birds: random FM chirps with pan
+    // 小鳥：短い一鳴き（たまに）— 音量小さめ、耳障りな高域は軽く制限
     function startBirds(){
       const g = makeGain(state.mute.birds?0:state.birds/100);
       nodes.birds.gain = g;
       function scheduleChirp(){
         if(!running) return;
         const now = ctx.currentTime;
-        const t = now + (Math.random()*2 + 0.8); // next in 0.8-2.8s
-        const dur = 0.18 + Math.random()*0.12;
+        const inSec = 1 + Math.random()*3; // 1-4s毎
+        const t = now + inSec;
+        const dur = 0.12 + Math.random()*0.08;
 
-        const carrier = ctx.createOscillator(); carrier.type='sine';
-        const mod = ctx.createOscillator(); mod.type='sine';
-        const modGain = ctx.createGain();
+        const o = ctx.createOscillator(); o.type='sine';
         const env = ctx.createGain(); env.gain.value = 0;
-        const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value = 3000 + Math.random()*2500; bp.Q.value=6;
-        const pan = new (window.StereoPannerNode || window.PannerNode)(ctx, { pan: (Math.random()*2-1) });
+        const bp  = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value = 3200 + Math.random()*1200; bp.Q.value=5;
 
-        carrier.frequency.value = 1200 + Math.random()*1200;
-        mod.frequency.value = 30 + Math.random()*90;
-        modGain.gain.value = 300 + Math.random()*400;
-
-        mod.connect(modGain).connect(carrier.frequency);
-        carrier.connect(env).connect(bp).connect(pan).connect(g);
+        o.frequency.value = 1400 + Math.random()*800;
+        o.connect(env).connect(bp).connect(g);
 
         env.gain.setValueAtTime(0, t);
-        env.gain.linearRampToValueAtTime(0.9, t + 0.03);
+        env.gain.linearRampToValueAtTime(0.7, t + 0.02);
         env.gain.exponentialRampToValueAtTime(0.001, t + dur);
 
-        carrier.start(t); mod.start(t);
-        carrier.stop(t + dur + 0.02); mod.stop(t + dur + 0.02);
+        o.start(t); o.stop(t + dur + 0.01);
 
-        // keep reference to clear if needed
-        const id = setTimeout(scheduleChirp, (t - now + dur)*1000);
+        const id = setTimeout(scheduleChirp, (inSec + dur)*1000);
         nodes.birds.timers.push(id);
       }
-      // kick off a few
-      for(let i=0;i<3;i++) scheduleChirp();
+      scheduleChirp();
     }
 
-    // Gentle music: slow pad chords (I–vi–IV–V in C)
-    const CHORDS = [
-      [261.63, 329.63, 392.00], // C major
-      [220.00, 261.63, 329.63], // A minor
-      [246.94, 329.63, 392.00], // B♭? (approx) / F? keep pleasant
-      [293.66, 369.99, 440.00], // D -> A sus feel
-    ];
-    function startMusic(){
-      const g = makeGain(state.mute.music?0:state.music/100);
-      nodes.music.gain = g; nodes.music.chordIndex = 0;
+    // チャイム：単発の温かい「ぽーん」
+    // 連続音・うなり・反響は使わず、1～2つの固定比和音（完全五度）を短く減衰
+    function playChime(at = ctx.currentTime + 0.02){
+      if(state.mute.chime || state.chime===0) return;
+      const g = nodes.chime.gain;
+      const env = ctx.createGain(); env.gain.value = 0;
 
-      function playChord(time){
+      // 基本：A4=440 か G4=392 を交互に使って単調にならないように
+      const basePool = [392, 440]; // G4, A4
+      const base = basePool[Math.floor(Math.random()*basePool.length)];
+      const fifth = base * 1.5; // 完全五度（ビートを避けるため近接周波数は使わない）
+
+      const o1 = ctx.createOscillator(); o1.type='sine'; o1.frequency.value = base;
+      const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.value = fifth;
+
+      // 軽いローパスで耳に刺さらないように
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value = 1800; lp.Q.value=0.2;
+
+      o1.connect(env); o2.connect(env);
+      env.connect(lp).connect(g);
+
+      // エンベロープ（短いアタック→約1.6秒で静かに消える）
+      env.gain.setValueAtTime(0, at);
+      env.gain.linearRampToValueAtTime(0.25, at + 0.03);
+      env.gain.linearRampToValueAtTime(0.22, at + 0.15);
+      env.gain.exponentialRampToValueAtTime(0.0008, at + 1.6);
+
+      o1.start(at); o2.start(at);
+      o1.stop(at + 1.7); o2.stop(at + 1.7);
+    }
+
+    function startChimeLoop(){
+      const g = makeGain(state.mute.chime?0:state.chime/100);
+      nodes.chime.gain = g;
+      function schedule(){
         if(!running) return;
-        const idx = nodes.music.chordIndex % CHORDS.length;
-        const chord = CHORDS[idx];
-        const duration = 4.5; // seconds
-        chord.forEach((f, i)=>{
-          const o = ctx.createOscillator(); o.type='sine'; o.frequency.value = f;
-          const env = ctx.createGain(); env.gain.value=0;
-          const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1200; lp.Q.value=0.3;
-
-          o.connect(env).connect(lp).connect(g);
-
-          env.gain.setValueAtTime(0, time);
-          env.gain.linearRampToValueAtTime(0.18, time+0.8);
-          env.gain.linearRampToValueAtTime(0.16, time+duration-0.6);
-          env.gain.linearRampToValueAtTime(0.0, time+duration);
-
-          o.start(time); o.stop(time+duration+0.02);
-        });
-        nodes.music.chordIndex++;
-        const id = setTimeout(()=>playChord(ctx.currentTime+0.1), duration*1000);
-        nodes.music.timers.push(id);
+        const gap = chimeRange.lo + Math.random()*(chimeRange.hi - chimeRange.lo);
+        playChime();
+        nodes.chime.timer = setTimeout(schedule, gap*1000);
       }
-      playChord(ctx.currentTime+0.05);
+      schedule();
     }
 
+    /* ===== 再生制御 ===== */
     function startAll(){
       ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
       master = master || ctx.createGain(); master.gain.value=0.9; master.connect(ctx.destination);
 
-      startOcean(); startRain(); startBrown(); startTone(); startBirds(); startMusic();
+      startRain(); startBrown(); startBirds(); startChimeLoop();
+
+      // 初期ゲイン反映
+      setVal('rain', state.rain);
+      setVal('brown', state.brown);
+      if(nodes.birds.gain) setVal('birds', state.birds);
+      if(nodes.chime.gain) setVal('chime', state.chime);
     }
 
     function stopAll(){
       try{
-        ['oceanSrc','rainSrc','brownSrc','toneO1','toneO2'].forEach(k=>{ if(nodes[k]){ try{nodes[k].stop();}catch{}}});
-        // clear timers
-        [...(nodes.birds?.timers||[]), ...(nodes.music?.timers||[])].forEach(id=>clearTimeout(id));
-        nodes.birds.timers=[]; nodes.music.timers=[];
-        // rebuild graph by closing and recreating context (safe reset)
+        if(nodes.rainSrc) nodes.rainSrc.stop();
+        if(nodes.brownSrc) nodes.brownSrc.stop();
+        (nodes.birds.timers||[]).forEach(id=>clearTimeout(id)); nodes.birds.timers=[];
+        if(nodes.chime.timer) clearTimeout(nodes.chime.timer);
+
         if(ctx && ctx.state!=='closed'){ ctx.close(); }
       }catch{}
       ctx = null; master = null;
-      // null out node refs
+
       for(const k in nodes){
         if(nodes[k] && nodes[k].gain){ nodes[k].gain = null; }
-        nodes[k]= (typeof nodes[k]==='object') ? {gain:null,timers:[], chordIndex:0} : null;
+        if(nodes[k] && nodes[k].timers) nodes[k].timers=[];
       }
     }
 
-    // Play / Stop / Timer
     function secFmt(s){ const m = Math.max(0, Math.floor(s/60)); const ss = Math.max(0, Math.floor(s%60)); return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`; }
     function tick(){
       const left = endAt - performance.now();
@@ -380,7 +335,7 @@
     $('play').addEventListener('click', play);
     $('stop').addEventListener('click', stop);
 
-    // Mix controls (±5%)
+    /* ===== ミキサー操作（±5%） ===== */
     function hookMix(name){
       document.querySelector(`[data-inc="${name}"]`).addEventListener('click', ()=> setVal(name, state[name]+5));
       document.querySelector(`[data-dec="${name}"]`).addEventListener('click', ()=> setVal(name, state[name]-5));
@@ -391,23 +346,22 @@
         setVal(name, state[name]); // apply mute
       });
     }
-    ['ocean','rain','brown','tone','birds','music'].forEach(hookMix);
+    ['rain','brown','birds','chime'].forEach(hookMix);
 
-    // Presets
+    /* ===== プリセット ===== */
     const PRESETS = {
-      calm:  {ocean:15,rain:20,brown:35,tone:10,birds:5, music:15},
-      sea:   {ocean:40,rain:5, brown:15,tone:5, birds:5, music:10},
-      rain:  {ocean:5, rain:55,brown:20,tone:5, birds:5, music:10},
-      focus: {ocean:0, rain:10,brown:55,tone:10,birds:0, music:10},
-      birds: {ocean:10,rain:10,brown:15,tone:5, birds:50, music:10},
-      music: {ocean:5, rain:10,brown:15,tone:10,birds:5, music:45}
+      calm:  {rain:25,brown:30,birds:8, chime:12},
+      rain:  {rain:55,brown:15,birds:5, chime:10},
+      focus: {rain:10,brown:55,birds:0, chime:8},
+      birds: {rain:15,brown:15,birds:35,chime:10},
+      chime: {rain:10,brown:10,birds:5, chime:35}
     };
     function applyPreset(p){
       for(const k of Object.keys(PRESETS[p])){
-        setVal(k, PRESETS[p][k]);
         state.mute[k]=false;
         const btn = document.querySelector(`[data-mute="${k}"]`);
         if(btn) btn.textContent='Mute';
+        setVal(k, PRESETS[p][k]);
       }
       document.querySelectorAll('.chip[data-preset]').forEach(c=>c.classList.remove('active'));
       document.querySelector(`.chip[data-preset="${p}"]`).classList.add('active');
@@ -416,6 +370,21 @@
       b.addEventListener('click', ()=> applyPreset(b.dataset.preset));
     });
     applyPreset('calm'); // default
+
+    /* ===== チャイム間隔（±2s、下限3 / 上限12） ===== */
+    function refreshChimeLabel(){ $('chimeInfo').textContent = dict[ui].chimeLabel(chimeRange.lo, chimeRange.hi); }
+    $('chimeSlow').addEventListener('click', ()=>{
+      chimeRange.lo = Math.min(12, chimeRange.lo+1);
+      chimeRange.hi = Math.min(14, Math.max(chimeRange.lo+1, chimeRange.hi+1));
+      refreshChimeLabel();
+    });
+    $('chimeFast').addEventListener('click', ()=>{
+      chimeRange.lo = Math.max(3, chimeRange.lo-1);
+      chimeRange.hi = Math.max(chimeRange.lo+1, chimeRange.hi-1);
+      refreshChimeLabel();
+    });
+    $('chimeOnce').addEventListener('click', ()=>{ if(ctx){ playChime(); } });
+
   </script>
 </body>
 </html>

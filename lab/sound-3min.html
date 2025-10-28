@@ -4,385 +4,418 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>3分サウンド — Mind Space</title>
-  <meta name="description" content="ホワイト/ピンク/ブラウンノイズ、雨/風/海のサウンドを自由にミックス。3分/5分/10分タイマー・フェード・URLシェア対応。"/>
+  <meta name="description" content="やさしい合成音のサウンドスケープ。海・雨・ブラウンノイズ・ソフトトーン・鳥のさえずり・やさしい音楽。±で配分調整、3分タイマー付き。"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-    .knob{appearance:none;width:100%;height:4px;background:#e2e8f0;border-radius:9999px;outline:none}
-    .knob::-webkit-slider-thumb{appearance:none;width:14px;height:14px;border-radius:50%;background:#0ea5e9;cursor:pointer}
-    .pill{font-size:10px;letter-spacing:.06em}
+    .btn{border:1px solid #e2e8f0;border-radius:9999px;padding:.35rem .7rem}
+    .btn:disabled{opacity:.5}
+    .row{display:grid;grid-template-columns:1fr auto auto auto 68px;gap:.5rem;align-items:center}
+    .bar{height:8px;background:linear-gradient(90deg,#bae6fd,#e2e8f0);border-radius:9999px;overflow:hidden}
+    .fill{height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#60a5fa)}
+    .chip{padding:.2rem .6rem;border:1px solid #e2e8f0;border-radius:9999px;background:#fff;font-size:.8rem}
+    .chip.active{border-color:#60a5fa;background:#eff6ff}
+    .mono{font-variant-numeric:tabular-nums}
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
   <header class="sticky top-0 z-30 backdrop-blur bg-white/40 border-b border-slate-200/40">
-    <div class="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
+    <div class="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between">
       <a id="homeLink" class="text-sm hover:underline">&larr; ホームへ戻る</a>
-      <div class="flex items-center gap-2">
-        <span class="text-xs pill px-2 py-0.5 rounded-full bg-sky-100 text-sky-700">BETA</span>
-        <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
-      </div>
+      <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
     </div>
   </header>
 
-  <main class="mx-auto max-w-5xl px-4 pb-16">
-    <h1 class="text-2xl md:text-3xl font-semibold mt-6" id="h1">3分サウンドで整える</h1>
-    <p class="mt-2 text-slate-600" id="lead">ノイズ＋環境音を自由にミックス。タイマーとフェードで、短いリセット。</p>
+  <main class="mx-auto max-w-4xl px-4 pb-16">
+    <h1 class="text-2xl md:text-3xl font-semibold mt-6" id="h1">3分サウンド</h1>
+    <p class="mt-2 text-slate-600" id="lead">やさしい合成音のサウンドスケープ。各要素の配分は±で微調整できます。</p>
 
-    <!-- プリセット -->
-    <section class="card p-5 mt-5">
+    <!-- プレイヤー -->
+    <section class="card p-5 mt-4">
       <div class="flex flex-wrap items-center gap-2">
-        <span class="text-sm text-slate-600" id="presetLabel">プリセット:</span>
-        <div class="flex flex-wrap gap-2">
-          <button data-preset="focus" class="px-3 py-1.5 rounded-full border hover:bg-white">集中 (Focus)</button>
-          <button data-preset="calm" class="px-3 py-1.5 rounded-full border hover:bg-white">静穏 (Calm)</button>
-          <button data-preset="rain" class="px-3 py-1.5 rounded-full border hover:bg-white">雨音 (Rain)</button>
-          <button data-preset="ocean" class="px-3 py-1.5 rounded-full border hover:bg-white">海辺 (Ocean)</button>
-          <button data-preset="wind" class="px-3 py-1.5 rounded-full border hover:bg-white">風 (Wind)</button>
-          <button data-preset="blank" class="px-3 py-1.5 rounded-full border hover:bg-white">リセット</button>
-        </div>
-        <div class="ml-auto text-sm flex items-center gap-2">
-          <label class="inline-flex items-center gap-1">
-            <input type="checkbox" id="ducking" class="accent-sky-600"/>
-            <span id="duckingLabel">話すと自動で小さくする</span>
-          </label>
-        </div>
+        <button id="play" class="btn">▶ 再生</button>
+        <button id="stop" class="btn" disabled>■ 停止</button>
+        <span class="text-sm text-slate-500">/</span>
+        <label class="text-sm flex items-center gap-2">
+          <span id="durLabel">時間</span>
+          <select id="minutes" class="border rounded px-2 py-1 text-sm">
+            <option value="3">3分</option>
+            <option value="5">5分</option>
+            <option value="10">10分</option>
+          </select>
+        </label>
+        <span class="ml-auto text-sm mono" id="remain">00:00</span>
       </div>
-    </section>
+      <div class="bar mt-3"><div id="prog" class="fill"></div></div>
 
-    <!-- ミキサー -->
-    <section class="card p-5 mt-5">
-      <h2 class="font-medium mb-3" id="mixerHead">レイヤー・ミキサー</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        <!-- 左列：ノイズ系 -->
-        <div class="space-y-4">
-          <div>
-            <div class="flex justify-between text-sm"><span>ホワイトノイズ</span><span><span id="whiteVal">0</span>%</span></div>
-            <input id="white" class="knob" type="range" min="0" max="100" value="0">
-          </div>
-          <div>
-            <div class="flex justify-between text-sm"><span>ピンクノイズ</span><span><span id="pinkVal">0</span>%</span></div>
-            <input id="pink" class="knob" type="range" min="0" max="100" value="0">
-          </div>
-          <div>
-            <div class="flex justify-between text-sm"><span>ブラウンノイズ</span><span><span id="brownVal">0</span>%</span></div>
-            <input id="brown" class="knob" type="range" min="0" max="100" value="0">
-          </div>
-        </div>
-        <!-- 右列：環境系（合成） -->
-        <div class="space-y-4">
-          <div>
-            <div class="flex justify-between text-sm"><span>雨</span><span><span id="rainVal">0</span>%</span></div>
-            <input id="rain" class="knob" type="range" min="0" max="100" value="0">
-          </div>
-          <div>
-            <div class="flex justify-between text-sm"><span>風</span><span><span id="windVal">0</span>%</span></div>
-            <input id="wind" class="knob" type="range" min="0" max="100" value="0">
-          </div>
-          <div>
-            <div class="flex justify-between text-sm"><span>海</span><span><span id="oceanVal">0</span>%</span></div>
-            <input id="ocean" class="knob" type="range" min="0" max="100" value="0">
-          </div>
-        </div>
+      <!-- プリセット -->
+      <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-slate-600" id="presetLabel">プリセット:</span>
+        <button class="chip active" data-preset="calm">落ち着き</button>
+        <button class="chip" data-preset="sea">海辺</button>
+        <button class="chip" data-preset="rain">雨音</button>
+        <button class="chip" data-preset="focus">集中</button>
+        <button class="chip" data-preset="birds">小鳥</button>
+        <button class="chip" data-preset="music">やさしい音楽</button>
       </div>
-      <div class="mt-4 grid md:grid-cols-3 gap-3">
-        <label class="text-sm flex items-center gap-2">
-          <span id="fadeInLabel">フェードイン</span>
-          <select id="fadeIn" class="border rounded px-2 py-1 text-sm">
-            <option value="0">0s</option><option>3</option><option>5</option><option>10</option>
-          </select>
-        </label>
-        <label class="text-sm flex items-center gap-2">
-          <span id="fadeOutLabel">フェードアウト</span>
-          <select id="fadeOut" class="border rounded px-2 py-1 text-sm">
-            <option value="3">3s</option><option>5</option><option>10</option><option>0</option>
-          </select>
-        </label>
-        <label class="text-sm flex items-center gap-2">
-          <span id="timerLabel">タイマー</span>
-          <select id="timer" class="border rounded px-2 py-1 text-sm">
-            <option value="180">3:00</option><option value="300">5:00</option><option value="600">10:00</option><option value="0">∞</option>
-          </select>
-        </label>
-      </div>
-      <div class="mt-4 flex flex-wrap items-center gap-3">
-        <button id="start" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-white">▶ 再生</button>
-        <button id="stop" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-white">■ 停止</button>
-        <div class="ml-auto text-slate-600 text-sm">
-          <span id="time">00:00</span>
-        </div>
-      </div>
-      <div class="mt-3 text-xs text-slate-500" id="shareHint">現在の設定はURLでシェアできます。</div>
-    </section>
 
-    <section class="mt-6 text-xs text-slate-500">
-      <p id="privacy">ブラウザ内で合成しています。音声は外部送信されません。</p>
+      <!-- ミキサー -->
+      <div class="mt-4 grid gap-2">
+        <!-- ラベル / - / + / Mute / 値 -->
+        <div class="row">
+          <div>海</div>
+          <button class="btn" data-dec="ocean">−</button>
+          <button class="btn" data-inc="ocean">＋</button>
+          <button class="btn" data-mute="ocean">Mute</button>
+          <div class="mono text-right"><span id="oceanVal">20</span>%</div>
+        </div>
+        <div class="row">
+          <div>雨</div>
+          <button class="btn" data-dec="rain">−</button>
+          <button class="btn" data-inc="rain">＋</button>
+          <button class="btn" data-mute="rain">Mute</button>
+          <div class="mono text-right"><span id="rainVal">30</span>%</div>
+        </div>
+        <div class="row">
+          <div>ブラウンノイズ</div>
+          <button class="btn" data-dec="brown">−</button>
+          <button class="btn" data-inc="brown">＋</button>
+          <button class="btn" data-mute="brown">Mute</button>
+          <div class="mono text-right"><span id="brownVal">30</span>%</div>
+        </div>
+        <div class="row">
+          <div>ソフトトーン</div>
+          <button class="btn" data-dec="tone">−</button>
+          <button class="btn" data-inc="tone">＋</button>
+          <button class="btn" data-mute="tone">Mute</button>
+          <div class="mono text-right"><span id="toneVal">10</span>%</div>
+        </div>
+        <div class="row">
+          <div>小鳥</div>
+          <button class="btn" data-dec="birds">−</button>
+          <button class="btn" data-inc="birds">＋</button>
+          <button class="btn" data-mute="birds">Mute</button>
+          <div class="mono text-right"><span id="birdsVal">10</span>%</div>
+        </div>
+        <div class="row">
+          <div>静かな和音</div>
+          <button class="btn" data-dec="music">−</button>
+          <button class="btn" data-inc="music">＋</button>
+          <button class="btn" data-mute="music">Mute</button>
+          <div class="mono text-right"><span id="musicVal">10</span>%</div>
+        </div>
+      </div>
     </section>
   </main>
 
   <script>
-    /* ===== Base path: GitHub Pages / Netlify 対応 ===== */
+    /* ===== base path for Home ===== */
     const isGitHubPages = location.hostname.endsWith('github.io');
     const BASE = isGitHubPages ? '/mind-space' : '';
     document.getElementById('homeLink').href = BASE + '/';
 
-    /* ===== i18n ===== */
-    const dict={
-      ja:{h1:"3分サウンドで整える",lead:"ノイズ＋環境音を自由にミックス。タイマーとフェードで、短いリセット。",presetLabel:"プリセット:",duckingLabel:"話すと自動で小さくする",mixerHead:"レイヤー・ミキサー",fadeInLabel:"フェードイン",fadeOutLabel:"フェードアウト",timerLabel:"タイマー",shareHint:"現在の設定はURLでシェアできます。",privacy:"ブラウザ内で合成しています。音声は外部送信されません。",start:"▶ 再生",stop:"■ 停止"},
-      en:{h1:"3-minute soundscape",lead:"Mix noise + ambient layers with timer and fades for a quick reset.",presetLabel:"Presets:",duckingLabel:"Auto-duck while speaking",mixerHead:"Layer mixer",fadeInLabel:"Fade-in",fadeOutLabel:"Fade-out",timerLabel:"Timer",shareHint:"You can share the current settings via URL.",privacy:"Audio is synthesized in your browser. Nothing is uploaded.",start:"▶ Play",stop:"■ Stop"}
+    /* ===== i18n (簡易) ===== */
+    const dict = {
+      ja:{h1:"3分サウンド",lead:"やさしい合成音のサウンドスケープ。各要素の配分は±で微調整できます。",dur:"時間",preset:"プリセット:",play:"▶ 再生",stop:"■ 停止"},
+      en:{h1:"3-minute soundscape",lead:"Gentle synthesized ambience. Adjust each layer with ± mix controls.",dur:"Duration",preset:"Presets:",play:"▶ Play",stop:"■ Stop"}
     };
-    const $=id=>document.getElementById(id);
+    const $ = id => document.getElementById(id);
     let ui = navigator.language?.startsWith('en') ? 'en' : 'ja';
     function applyUI(){
-      $('h1').textContent = dict[ui].h1; $('lead').textContent = dict[ui].lead;
-      $('presetLabel').textContent = dict[ui].presetLabel; $('duckingLabel').textContent = dict[ui].duckingLabel;
-      $('mixerHead').textContent = dict[ui].mixerHead; $('fadeInLabel').textContent = dict[ui].fadeInLabel;
-      $('fadeOutLabel').textContent = dict[ui].fadeOutLabel; $('timerLabel').textContent = dict[ui].timerLabel;
-      $('shareHint').textContent = dict[ui].shareHint; $('privacy').textContent = dict[ui].privacy;
-      $('start').textContent = dict[ui].start; $('stop').textContent = dict[ui].stop;
+      $('h1').textContent = dict[ui].h1;
+      $('lead').textContent = dict[ui].lead;
+      $('durLabel').textContent = dict[ui].dur;
+      $('presetLabel').textContent = dict[ui].preset;
+      $('play').textContent = dict[ui].play;
+      $('stop').textContent = dict[ui].stop;
       $('lang').textContent = (ui==='ja'?'English':'日本語');
       document.documentElement.lang = ui;
     }
     $('lang').addEventListener('click', ()=>{ ui = (ui==='ja'?'en':'ja'); applyUI(); });
     applyUI();
 
-    /* ===== WebAudio 合成 ===== */
-    let ctx, master, analyser;
-    const layers = {};
-    const vals = {
-      white:0, pink:0, brown:0, rain:0, wind:0, ocean:0
-    };
-    const controls = ['white','pink','brown','rain','wind','ocean'];
-    controls.forEach(k=>{
-      $(k).addEventListener('input', e=>{
-        vals[k] = +e.target.value/100;
-        $(k+'Val').textContent = e.target.value;
-        if(layers[k]) layers[k].gain.gain.setTargetAtTime(vals[k], ctx.currentTime, 0.05);
-        saveToURL();
-      });
-    });
+    /* ===== Web Audio Synth ===== */
+    let ctx, master, running=false, endAt=0, rafId=null;
 
-    function ensureAudio(){
-      if(ctx) return;
-      ctx = new (window.AudioContext||window.webkitAudioContext)();
-      master = ctx.createGain(); master.gain.value = 0.0; // masterはフェードで上げる
-      analyser = ctx.createAnalyser();
-      master.connect(analyser).connect(ctx.destination);
-      // 各レイヤー初期化
-      makeNoiseLayer('white','white');
-      makeNoiseLayer('pink','pink');
-      makeNoiseLayer('brown','brown');
-      makeRainLayer();
-      makeWindLayer();
-      makeOceanLayer();
+    const state = {
+      ocean: 20, rain: 30, brown: 30, tone: 10, birds: 10, music: 10,
+      mute: {ocean:false,rain:false,brown:false,tone:false,birds:false,music:false}
+    };
+
+    const nodes = {
+      ocean: null, rain: null, brown: null, tone: null,
+      birds: {gain:null, timers:[]},
+      music: {gain:null, timers:[], chordIndex:0}
+    };
+
+    function clamp(v){ return Math.max(0, Math.min(100, v)); }
+    function setVal(name, v){
+      state[name] = clamp(v);
+      $(name+'Val').textContent = state[name];
+      if(nodes[name]){
+        const g = nodes[name].gain ? nodes[name].gain : nodes[name];
+        const vol = (state.mute[name] ? 0 : state[name]/100);
+        g.gain.cancelScheduledValues(ctx.currentTime);
+        g.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.05);
+      }
     }
 
-    function makeGain(){ const g=ctx.createGain(); g.gain.value=0; return g; }
-    function makeNoiseBuffer(color){
-      const len = 2*ctx.sampleRate; // 2秒
-      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-      const data = buf.getChannelData(0);
-      if(color==='white'){
-        for(let i=0;i<len;i++) data[i]=Math.random()*2-1;
-      }else if(color==='pink'){
-        // Paul Kellet pink
-        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
-        for(let i=0;i<len;i++){
-          const white = Math.random()*2-1;
-          b0=0.99886*b0+white*0.0555179;
-          b1=0.99332*b1+white*0.0750759;
-          b2=0.96900*b2+white*0.1538520;
-          b3=0.86650*b3+white*0.3104856;
-          b4=0.55000*b4+white*0.5329522;
-          b5=-0.7616*b5-white*0.0168980;
-          data[i]=b0+b1+b2+b3+b4+b5+b6+white*0.5362;
-          data[i]*=0.11; b6=white*0.115926;
-        }
-      }else{ // brown
-        let last=0;
-        for(let i=0;i<len;i++){
-          const white=Math.random()*2-1;
-          data[i]=(last+0.02*white)/1.02; last=data[i];
-          data[i]*=3.5;
+    // Utility: noise source
+    function createNoise(type='white'){
+      const bufferSize = 2 * ctx.sampleRate;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let lastOut = 0;
+      for(let i=0; i<bufferSize; i++){
+        const white = Math.random()*2-1;
+        if(type==='brown'){
+          data[i] = (lastOut + 0.02 * white) / 1.02;
+          lastOut = data[i];
+          data[i] *= 3.5; // gain
+        } else if(type==='pink'){
+          // Voss-McCartney-ish
+          data[i] = data[i-1] ? (data[i-1]*0.997 + white*0.003) : white;
+        } else {
+          data[i] = white;
         }
       }
-      return buf;
-    }
-    function makeNoiseLayer(key,color){
       const src = ctx.createBufferSource();
-      src.buffer = makeNoiseBuffer(color);
+      src.buffer = buffer;
       src.loop = true;
-      const g = makeGain();
-      src.connect(g).connect(master);
-      src.start();
-      layers[key] = {src, gain:g};
-    }
-    function makeRainLayer(){
-      // 雨: バンドパスノイズ + たまに滴（短いノイズスパイク）
-      const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1200; bp.Q.value=0.8;
-      const g = makeGain();
-      const src = ctx.createBufferSource(); src.buffer = makeNoiseBuffer('white'); src.loop=true;
-      src.connect(bp).connect(g).connect(master);
-      src.start();
-      // 滴：短いインパルスをランダムに追加
-      const dripGain = ctx.createGain(); dripGain.gain.value=0; dripGain.connect(master);
-      function drip(){
-        if(!ctx) return;
-        const osc = ctx.createOscillator(); osc.type='triangle'; osc.frequency.value=1200+Math.random()*800;
-        const dg = ctx.createGain(); dg.gain.value=0.0001;
-        osc.connect(dg).connect(dripGain);
-        osc.start();
-        dg.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime+0.01);
-        dg.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.25);
-        osc.stop(ctx.currentTime+0.3);
-        setTimeout(drip, 300+Math.random()*1200);
-      }
-      drip();
-      layers.rain = { src, gain:g };
-    }
-    function makeWindLayer(){
-      // 風: ブラウンノイズ + ゆっくりLFOでうねり
-      const l = makeNoiseBuffer('brown');
-      const src = ctx.createBufferSource(); src.buffer = l; src.loop=true;
-      const g = makeGain();
-      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=600;
-      const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.08;
-      const lfoGain = ctx.createGain(); lfoGain.gain.value=300;
-      lfo.connect(lfoGain).connect(lp.frequency);
-      lfo.start();
-      src.connect(lp).connect(g).connect(master); src.start();
-      layers.wind = {src, gain:g};
-    }
-    function makeOceanLayer(){
-      // 海: ピンクノイズ + 低域強調 + ゆっくりボリューム揺れ
-      const l = makeNoiseBuffer('pink'); const src = ctx.createBufferSource(); src.buffer = l; src.loop=true;
-      const g = makeGain();
-      const sh = ctx.createBiquadFilter(); sh.type='lowshelf'; sh.frequency.value=180; sh.gain.value=10;
-      const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.05;
-      const lfoGain = ctx.createGain(); lfoGain.gain.value=0.2; lfo.connect(lfoGain).connect(g.gain); lfo.start();
-      src.connect(sh).connect(g).connect(master); src.start();
-      layers.ocean = {src, gain:g};
+      return src;
     }
 
-    /* ===== 再生制御・タイマー・フェード ===== */
-    let timerId=null, remain=0, isPlaying=false;
-    const fadeIn = $('fadeIn'), fadeOut = $('fadeOut'), timerSel = $('timer');
-    function setMaster(val, dur=0.1){
-      if(!ctx) return;
-      master.gain.cancelScheduledValues(ctx.currentTime);
-      master.gain.linearRampToValueAtTime(val, ctx.currentTime + +dur);
-    }
-    function start(){
-      ensureAudio();
-      // 各レイヤーの現在値適用
-      Object.keys(vals).forEach(k=>{ if(layers[k]) layers[k].gain.gain.setTargetAtTime(vals[k], ctx.currentTime, 0.05); });
-      isPlaying=true;
-      const fi = +fadeIn.value||0;
-      setMaster(0,0.05); setMaster(1, fi||0.1);
-      // タイマー設定
-      const total = +timerSel.value;
-      if(total>0){
-        remain = total;
-        updateClock();
-        clearInterval(timerId);
-        timerId = setInterval(()=>{
-          remain--;
-          updateClock();
-          if(remain<=0){
-            stop(true);
-          }else{
-            // 終了前フェードアウト開始
-            const fo = +fadeOut.value||0;
-            if(fo>0 && remain===fo){
-              setMaster(0, fo);
-            }
-          }
-        },1000);
-      }else{
-        $('time').textContent = '∞';
-      }
-    }
-    function stop(byTimer=false){
-      if(!ctx) return;
-      isPlaying=false;
-      clearInterval(timerId); timerId=null;
-      const fo = +fadeOut.value||0;
-      setMaster(0, fo||0.2);
-      $('time').textContent = '00:00';
-    }
-    function updateClock(){
-      const m = Math.floor(remain/60).toString().padStart(2,'0');
-      const s = (remain%60).toString().padStart(2,'0');
-      $('time').textContent = `${m}:${s}`;
-    }
-    $('start').addEventListener('click', start);
-    $('stop').addEventListener('click', ()=>stop(false));
-
-    /* ===== マイク入力でダッキング（任意）===== */
-    let mediaStream=null, analyserMic=null, micData=null;
-    $('ducking').addEventListener('change', async (e)=>{
-      if(!ctx) ensureAudio();
-      if(e.target.checked){
-        try{
-          mediaStream = await navigator.mediaDevices.getUserMedia({audio:true});
-          const src = ctx.createMediaStreamSource(mediaStream);
-          analyserMic = ctx.createAnalyser(); analyserMic.fftSize=2048;
-          src.connect(analyserMic);
-          micData = new Uint8Array(analyserMic.fftSize);
-          loopDucking();
-        }catch(_){}
-      }else{
-        if(mediaStream) mediaStream.getTracks().forEach(t=>t.stop());
-        analyserMic=null; micData=null;
-      }
-    });
-    function loopDucking(){
-      if(!analyserMic || !ctx) return;
-      requestAnimationFrame(loopDucking);
-      analyserMic.getByteTimeDomainData(micData);
-      // 音声の振幅をざっくり検出
-      let sum=0; for(let i=0;i<micData.length;i++){ const v=(micData[i]-128)/128; sum+=v*v; }
-      const rms = Math.sqrt(sum/micData.length);
-      const target = rms>0.09 ? 0.35 : 1.0; // 話している時だけ少し下げる
-      if(isPlaying) setMaster(target, 0.15);
+    function makeGain(vol=0){
+      const g = ctx.createGain();
+      g.gain.value = vol;
+      g.connect(master);
+      return g;
     }
 
-    /* ===== プリセット & URLシェア ===== */
-    const presets={
-      focus:{ white:0, pink:0, brown:45, rain:0, wind:0, ocean:20, timer:300, fadeIn:3, fadeOut:5 },
-      calm: { white:0, pink:25, brown:15, rain:0, wind:20, ocean:0, timer:300, fadeIn:5, fadeOut:5 },
-      rain: { white:0, pink:0, brown:0, rain:55, wind:10, ocean:0, timer:600, fadeIn:3, fadeOut:5 },
-      ocean:{ white:0, pink:10, brown:0, rain:0, wind:0, ocean:55, timer:600, fadeIn:5, fadeOut:10 },
-      wind: { white:0, pink:0, brown:0, rain:0, wind:55, ocean:10, timer:180, fadeIn:3, fadeOut:3 },
-      blank:{ white:0, pink:0, brown:0, rain:0, wind:0, ocean:0, timer:180, fadeIn:0, fadeOut:3 }
+    // Ocean: pink noise -> dual filters + slow AM (swell) + random gusts
+    function startOcean(){
+      const pink = createNoise('pink');
+      const g = makeGain(state.mute.ocean?0:state.ocean/100);
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=600; lp.Q.value=0.5;
+      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=80; hp.Q.value=0.7;
+      pink.connect(lp).connect(hp).connect(g);
+
+      // Swell: slow LFO to simulate waves
+      const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value = 0.08 + Math.random()*0.04;
+      const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.5; // depth
+      lfo.connect(lfoGain).connect(g.gain);
+      // Bias so it ebbs-and-flows around current level
+      const base = g.gain.value;
+      const bias = ctx.createConstantSource(); bias.offset.value = base;
+      const sum = ctx.createGain(); sum.gain.value=1;
+      bias.connect(sum); lfoGain.connect(sum);
+      sum.connect(g.gain);
+      bias.start(); lfo.start(); pink.start();
+
+      nodes.ocean = g; nodes.oceanSrc = pink; nodes.oceanLfo = lfo; nodes.oceanBias = bias; nodes.oceanSum=sum;
+    }
+
+    // Rain: white noise -> highpass + gentle shelf, light random flutter
+    function startRain(){
+      const white = createNoise('white');
+      const g = makeGain(state.mute.rain?0:state.rain/100);
+      const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=4000; hp.Q.value=0.7;
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=12000; lp.Q.value=0.2;
+      white.connect(hp).connect(lp).connect(g);
+      // subtle flutter
+      const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.6;
+      const lfoGain = ctx.createGain(); lfoGain.gain.value=0.15;
+      lfo.connect(lfoGain).connect(g.gain); lfo.start(); white.start();
+
+      nodes.rain = g; nodes.rainSrc=white; nodes.rainLfo=lfo; nodes.rainLfog=lfoGain;
+    }
+
+    // Brown noise (very low, HVAC-like)
+    function startBrown(){
+      const brown = createNoise('brown');
+      const g = makeGain(state.mute.brown?0:state.brown/100);
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=500; lp.Q.value=0.2;
+      brown.connect(lp).connect(g); brown.start();
+      nodes.brown = g; nodes.brownSrc=brown;
+    }
+
+    // Soft tone: two close sines (binaural-ish beating)
+    function startTone(){
+      const g = makeGain(state.mute.tone?0:state.tone/100);
+      const o1 = ctx.createOscillator(); o1.type='sine'; o1.frequency.value=396;
+      const o2 = ctx.createOscillator(); o2.type='sine'; o2.frequency.value=401.2; // gentle beat
+      o1.connect(g); o2.connect(g);
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1200; lp.Q.value=0.1;
+      g.connect(lp); lp.connect(master);
+      o1.start(); o2.start();
+      nodes.tone = g; nodes.toneLP=lp; nodes.toneO1=o1; nodes.toneO2=o2;
+    }
+
+    // Birds: random FM chirps with pan
+    function startBirds(){
+      const g = makeGain(state.mute.birds?0:state.birds/100);
+      nodes.birds.gain = g;
+      function scheduleChirp(){
+        if(!running) return;
+        const now = ctx.currentTime;
+        const t = now + (Math.random()*2 + 0.8); // next in 0.8-2.8s
+        const dur = 0.18 + Math.random()*0.12;
+
+        const carrier = ctx.createOscillator(); carrier.type='sine';
+        const mod = ctx.createOscillator(); mod.type='sine';
+        const modGain = ctx.createGain();
+        const env = ctx.createGain(); env.gain.value = 0;
+        const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value = 3000 + Math.random()*2500; bp.Q.value=6;
+        const pan = new (window.StereoPannerNode || window.PannerNode)(ctx, { pan: (Math.random()*2-1) });
+
+        carrier.frequency.value = 1200 + Math.random()*1200;
+        mod.frequency.value = 30 + Math.random()*90;
+        modGain.gain.value = 300 + Math.random()*400;
+
+        mod.connect(modGain).connect(carrier.frequency);
+        carrier.connect(env).connect(bp).connect(pan).connect(g);
+
+        env.gain.setValueAtTime(0, t);
+        env.gain.linearRampToValueAtTime(0.9, t + 0.03);
+        env.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+        carrier.start(t); mod.start(t);
+        carrier.stop(t + dur + 0.02); mod.stop(t + dur + 0.02);
+
+        // keep reference to clear if needed
+        const id = setTimeout(scheduleChirp, (t - now + dur)*1000);
+        nodes.birds.timers.push(id);
+      }
+      // kick off a few
+      for(let i=0;i<3;i++) scheduleChirp();
+    }
+
+    // Gentle music: slow pad chords (I–vi–IV–V in C)
+    const CHORDS = [
+      [261.63, 329.63, 392.00], // C major
+      [220.00, 261.63, 329.63], // A minor
+      [246.94, 329.63, 392.00], // B♭? (approx) / F? keep pleasant
+      [293.66, 369.99, 440.00], // D -> A sus feel
+    ];
+    function startMusic(){
+      const g = makeGain(state.mute.music?0:state.music/100);
+      nodes.music.gain = g; nodes.music.chordIndex = 0;
+
+      function playChord(time){
+        if(!running) return;
+        const idx = nodes.music.chordIndex % CHORDS.length;
+        const chord = CHORDS[idx];
+        const duration = 4.5; // seconds
+        chord.forEach((f, i)=>{
+          const o = ctx.createOscillator(); o.type='sine'; o.frequency.value = f;
+          const env = ctx.createGain(); env.gain.value=0;
+          const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1200; lp.Q.value=0.3;
+
+          o.connect(env).connect(lp).connect(g);
+
+          env.gain.setValueAtTime(0, time);
+          env.gain.linearRampToValueAtTime(0.18, time+0.8);
+          env.gain.linearRampToValueAtTime(0.16, time+duration-0.6);
+          env.gain.linearRampToValueAtTime(0.0, time+duration);
+
+          o.start(time); o.stop(time+duration+0.02);
+        });
+        nodes.music.chordIndex++;
+        const id = setTimeout(()=>playChord(ctx.currentTime+0.1), duration*1000);
+        nodes.music.timers.push(id);
+      }
+      playChord(ctx.currentTime+0.05);
+    }
+
+    function startAll(){
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      master = master || ctx.createGain(); master.gain.value=0.9; master.connect(ctx.destination);
+
+      startOcean(); startRain(); startBrown(); startTone(); startBirds(); startMusic();
+    }
+
+    function stopAll(){
+      try{
+        ['oceanSrc','rainSrc','brownSrc','toneO1','toneO2'].forEach(k=>{ if(nodes[k]){ try{nodes[k].stop();}catch{}}});
+        // clear timers
+        [...(nodes.birds?.timers||[]), ...(nodes.music?.timers||[])].forEach(id=>clearTimeout(id));
+        nodes.birds.timers=[]; nodes.music.timers=[];
+        // rebuild graph by closing and recreating context (safe reset)
+        if(ctx && ctx.state!=='closed'){ ctx.close(); }
+      }catch{}
+      ctx = null; master = null;
+      // null out node refs
+      for(const k in nodes){
+        if(nodes[k] && nodes[k].gain){ nodes[k].gain = null; }
+        nodes[k]= (typeof nodes[k]==='object') ? {gain:null,timers:[], chordIndex:0} : null;
+      }
+    }
+
+    // Play / Stop / Timer
+    function secFmt(s){ const m = Math.max(0, Math.floor(s/60)); const ss = Math.max(0, Math.floor(s%60)); return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`; }
+    function tick(){
+      const left = endAt - performance.now();
+      const durMs = parseInt($('minutes').value,10)*60*1000;
+      const passed = Math.min(durMs, durMs - Math.max(0,left));
+      $('prog').style.width = `${(passed/durMs)*100}%`;
+      $('remain').textContent = secFmt(Math.max(0, Math.ceil(left/1000)));
+      if(left <= 0){ stop(); return; }
+      rafId = requestAnimationFrame(tick);
+    }
+    function play(){
+      if(running) return;
+      running = true;
+      $('play').disabled = true; $('stop').disabled = false;
+      startAll();
+      endAt = performance.now() + parseInt($('minutes').value,10)*60*1000;
+      cancelAnimationFrame(rafId); tick();
+    }
+    function stop(){
+      running = false;
+      $('play').disabled = false; $('stop').disabled = true;
+      cancelAnimationFrame(rafId);
+      $('prog').style.width='0%'; $('remain').textContent = '00:00';
+      stopAll();
+    }
+    $('play').addEventListener('click', play);
+    $('stop').addEventListener('click', stop);
+
+    // Mix controls (±5%)
+    function hookMix(name){
+      document.querySelector(`[data-inc="${name}"]`).addEventListener('click', ()=> setVal(name, state[name]+5));
+      document.querySelector(`[data-dec="${name}"]`).addEventListener('click', ()=> setVal(name, state[name]-5));
+      document.querySelector(`[data-mute="${name}"]`).addEventListener('click', ()=>{
+        state.mute[name] = !state.mute[name];
+        const btn = document.querySelector(`[data-mute="${name}"]`);
+        btn.textContent = state.mute[name] ? 'Unmute' : 'Mute';
+        setVal(name, state[name]); // apply mute
+      });
+    }
+    ['ocean','rain','brown','tone','birds','music'].forEach(hookMix);
+
+    // Presets
+    const PRESETS = {
+      calm:  {ocean:15,rain:20,brown:35,tone:10,birds:5, music:15},
+      sea:   {ocean:40,rain:5, brown:15,tone:5, birds:5, music:10},
+      rain:  {ocean:5, rain:55,brown:20,tone:5, birds:5, music:10},
+      focus: {ocean:0, rain:10,brown:55,tone:10,birds:0, music:10},
+      birds: {ocean:10,rain:10,brown:15,tone:5, birds:50, music:10},
+      music: {ocean:5, rain:10,brown:15,tone:10,birds:5, music:45}
     };
-    document.querySelectorAll('[data-preset]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const p = presets[btn.dataset.preset];
-        Object.keys(vals).forEach(k=>{ vals[k]=p[k]/100; $(k).value=p[k]; $(k+'Val').textContent=p[k]; if(ctx && layers[k]) layers[k].gain.gain.value=vals[k]; });
-        $('timer').value = p.timer; $('fadeIn').value=p.fadeIn; $('fadeOut').value=p.fadeOut;
-        saveToURL();
-      });
+    function applyPreset(p){
+      for(const k of Object.keys(PRESETS[p])){
+        setVal(k, PRESETS[p][k]);
+        state.mute[k]=false;
+        const btn = document.querySelector(`[data-mute="${k}"]`);
+        if(btn) btn.textContent='Mute';
+      }
+      document.querySelectorAll('.chip[data-preset]').forEach(c=>c.classList.remove('active'));
+      document.querySelector(`.chip[data-preset="${p}"]`).classList.add('active');
+    }
+    document.querySelectorAll('.chip[data-preset]').forEach(b=>{
+      b.addEventListener('click', ()=> applyPreset(b.dataset.preset));
     });
-
-    function saveToURL(){
-      const q = new URLSearchParams();
-      Object.keys(vals).forEach(k=> q.set(k, Math.round(vals[k]*100)));
-      q.set('t', $('timer').value); q.set('fi', $('fadeIn').value); q.set('fo', $('fadeOut').value);
-      const url = location.pathname + '?' + q.toString();
-      history.replaceState(null,'',url);
-    }
-    function loadFromURL(){
-      const q = new URLSearchParams(location.search);
-      let changed=false;
-      Object.keys(vals).forEach(k=>{
-        if(q.has(k)){ const v=+q.get(k); $(k).value=v; $(k+'Val').textContent=v; vals[k]=v/100; changed=true; }
-      });
-      if(q.has('t')) $('timer').value=q.get('t');
-      if(q.has('fi')) $('fadeIn').value=q.get('fi');
-      if(q.has('fo')) $('fadeOut').value=q.get('fo');
-      if(changed) applyUI();
-    }
-    loadFromURL();
+    applyPreset('calm'); // default
   </script>
 </body>
 </html>

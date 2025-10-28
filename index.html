@@ -6,15 +6,14 @@
   <title id="pageTitle">AIでつくる心の余白 / Mind Space with AI</title>
   <meta name="description" id="metaDesc" content="癒し・創造・内省のためのAI活用ガイド" />
 
-  <!-- 多言語SEO（任意） -->
-  <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="ja" />
-  <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/?lang=en" hreflang="en" />
-  <link rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="x-default" />
+  <!-- 多言語SEO（任意 / 自動書き換えに合わせて後ろで上書きします） -->
+  <link id="altJa" rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="ja" />
+  <link id="altEn" rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/?lang=en" hreflang="en" />
+  <link id="altDef" rel="alternate" href="https://rabbitmrr-cmyk.github.io/mind-space/" hreflang="x-default" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .soft-shadow{box-shadow:0 8px 24px rgba(15,23,42,.06);}
-    /* ▼ コンセプト用（押せない見た目） */
     .feature img{opacity:.96}
     .feature .pill{font-size:10px; letter-spacing:.06em}
   </style>
@@ -53,10 +52,9 @@
       </div>
     </section>
 
-    <!-- CONCEPT（押せない情報ブロックにリデザイン） -->
+    <!-- CONCEPT（押せない情報ブロック） -->
     <section id="concept" class="mx-auto max-w-6xl px-4 py-14">
       <div class="grid md:grid-cols-3 gap-10">
-        <!-- Calm -->
         <div class="feature">
           <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4"/>
           <div class="flex items-center gap-2 mb-1">
@@ -65,7 +63,6 @@
           </div>
           <p id="p1Text" class="text-sm text-slate-600">瞑想的プロンプト、音の生成、やさしい自動化で“オフになる時間”を取り戻す。</p>
         </div>
-        <!-- Create -->
         <div class="feature">
           <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36" alt="" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4"/>
           <div class="flex items-center gap-2 mb-1">
@@ -74,7 +71,6 @@
           </div>
           <p id="p2Text" class="text-sm text-slate-600">言葉・色・音・構図。小さく生むためのAIレシピで、ひらめきを形に。</p>
         </div>
-        <!-- Reflect -->
         <div class="feature">
           <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" alt="" class="w-full aspect-[4/3] object-cover rounded-2xl mb-4"/>
           <div class="flex items-center gap-2 mb-1">
@@ -86,34 +82,34 @@
       </div>
     </section>
 
-    <!-- HUB（体験+ガイド：押せるカードのまま） -->
+    <!-- HUB（体験+ガイド） -->
     <section id="hub" class="mx-auto max-w-6xl px-4 py-14">
       <h2 id="hubTitle" class="text-xl font-semibold mb-6">体験とガイド</h2>
       <div class="grid md:grid-cols-4 gap-6">
 
         <!-- 色で選ぶ詩のひととき -->
-        <a href="lab/poem-color.html" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="色で選ぶ詩のひとときへ">
+        <a id="linkPoem" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="色で選ぶ詩のひとときへ">
           <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="" class="w-full aspect-[4/3] object-cover rounded-xl mb-4"/>
           <h3 class="text-sm font-medium" id="cardPoem">色で選ぶ詩のひととき</h3>
           <p class="mt-2 text-xs text-slate-600" id="cardPoemDesc">RGBパレットで色（ムード）を選ぶと、世界の詩を原文＋あなたの言語で。</p>
         </a>
 
         <!-- リフレーミング -->
-        <a href="/lab/reframe.html" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="AIリフレーミングへ">
+        <a id="linkReframe" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="AIリフレーミングへ">
           <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80" alt="" class="w-full aspect-[4/3] object-cover rounded-xl mb-4"/>
           <h3 class="text-sm font-medium" id="cardReframe">AIリフレーミング・ラボ（3行で整える）</h3>
           <p class="mt-2 text-xs text-slate-600" id="cardReframeDesc">短い言葉で心の整理を促す、静かで丁寧なカウンセラー風の対話。</p>
         </a>
 
         <!-- 3分サウンド -->
-        <a href="/lab/sound-3min.html" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="3分サウンドへ">
+        <a id="linkSound" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="3分サウンドへ">
           <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?auto=format&fit=crop&w=1200&q=80" alt="" class="w-full aspect-[4/3] object-cover rounded-xl mb-4"/>
           <h3 class="text-sm font-medium" id="cardSound">3分サウンドで整える</h3>
           <p class="mt-2 text-xs text-slate-600" id="cardSoundDesc">やさしい音（ソフトトーン/ブラウンノイズ/雨）で、3分の切り替え。</p>
         </a>
 
         <!-- 壁紙 -->
-        <a href="/lab/wallpaper.html" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="壁紙へ">
+        <a id="linkWp" class="group block rounded-2xl border bg-white/70 p-5 soft-shadow hover:shadow-md transition" aria-label="壁紙へ">
           <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" alt="" class="w-full aspect-[4/3] object-cover rounded-xl mb-4"/>
           <h3 class="text-sm font-medium" id="cardWp">深呼吸を思い出す壁紙</h3>
           <p class="mt-2 text-xs text-slate-600" id="cardWpDesc">静かな写真を配布。デスクトップでひと呼吸の合図に。</p>
@@ -126,6 +122,14 @@
   <footer id="footer" class="py-10 text-center text-xs text-slate-500">© 2025 Mind Space by AI. All rights reserved.</footer>
 
   <script>
+    /* ========= 1) ベースパス自動判定 =========
+       - GitHub Pages:   https://<user>.github.io/mind-space/  → BASE = '/mind-space'
+       - Netlify/独自ドメイン: ルート配下                     → BASE = ''
+    */
+    const isGitHubPages = location.hostname.endsWith('github.io');
+    const BASE = isGitHubPages ? '/mind-space' : '';
+
+    /* ========= 2) i18n ========= */
     const dict={
       ja:{
         title:"AIでつくる心の余白 / Mind Space with AI",desc:"癒し・創造・内省のためのAI活用ガイド",
@@ -168,7 +172,7 @@
     else if(!urlLang && navigator.language?.startsWith("en")) { lang="en"; }
 
     function setTxt(id,key){ if(el(id)) el(id).textContent=dict[lang][key]; }
-    function apply(){
+    function applyLang(){
       document.documentElement.lang=lang;
       document.title=dict[lang].title;
       el("metaDesc").setAttribute("content",dict[lang].desc);
@@ -178,8 +182,30 @@
        "cardSound","cardSoundDesc","cardWp","cardWpDesc","footer"].forEach(k=>setTxt(k,k));
       el("langToggle").textContent=dict[lang].toggle;
     }
-    apply();
-    el("langToggle").addEventListener("click",()=>{ lang=lang==="ja"?"en":"ja"; apply(); history.replaceState(null,"",`?lang=${lang}`); });
+
+    /* ========= 3) ルーティング（リンクを動的に張る） ========= */
+    function setLinks(){
+      // 内部ページへの相対パスを BASE に合わせて組み立て
+      el("linkPoem").setAttribute("href",   BASE + "/lab/poem-color.html");
+      el("linkReframe").setAttribute("href",BASE + "/lab/reframe.html");
+      el("linkSound").setAttribute("href",  BASE + "/lab/sound-3min.html");
+      el("linkWp").setAttribute("href",     BASE + "/lab/wallpaper.html");
+
+      // hreflang も現在のホストに合わせて自動更新（任意）
+      const origin = location.origin + (isGitHubPages ? "/mind-space" : "");
+      el("altJa").setAttribute("href", origin + "/");
+      el("altEn").setAttribute("href", origin + "/?lang=en");
+      el("altDef").setAttribute("href", origin + "/");
+    }
+
+    applyLang();
+    setLinks();
+
+    el("langToggle").addEventListener("click",()=>{
+      lang=lang==="ja"?"en":"ja";
+      applyLang();
+      history.replaceState(null,"",`?lang=${lang}`);
+    });
   </script>
 </body>
 </html>

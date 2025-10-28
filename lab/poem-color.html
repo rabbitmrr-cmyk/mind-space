@@ -14,7 +14,8 @@
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
   <header class="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between">
-    <a href="/mind-space/" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
+    <!-- ▼ href はダミーにし、JSで安全なホームURLに書き換えます -->
+    <a id="backLink" href="#" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
     <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
   </header>
 
@@ -64,6 +65,10 @@
   </main>
 
   <script>
+    // ===== ルート自動判定（GitHub Pages と Netlify 両対応） =====
+    const isGitHubPages = location.hostname.endsWith('github.io');
+    const BASE = isGitHubPages ? '/mind-space' : '';
+
     // ===== i18n =====
     const dict={
       ja:{title:"色で選ぶ5分の詩 — Mind Space",desc:"RGBカラーパレットから色を選び、世界の短い詩を一篇。原文＋あなたの言語で静かに読む。",
@@ -77,6 +82,7 @@
     };
     const $=id=>document.getElementById(id);
     let uiLang="ja"; if(navigator.language?.startsWith("en")) uiLang="en";
+
     function applyUI(){
       document.title=dict[uiLang].title; $("desc").setAttribute("content",dict[uiLang].desc);
       ["back","h1","lead","pick"].forEach(k=>{$(k).textContent=dict[uiLang][k];});
@@ -84,6 +90,11 @@
       $("toggleLang").textContent = dict[uiLang].toggleOT;
       $("lang").textContent = dict[uiLang].toggle;
       document.documentElement.lang=uiLang;
+
+      // ▼ ホームへの戻り先を現在のホストに合わせて更新（UI言語がenなら ?lang=en を付与）
+      const homeUrl = BASE + "/" + (uiLang === "en" ? "?lang=en" : "");
+      const backA = $("backLink");
+      if (backA) backA.setAttribute("href", homeUrl);
     }
 
     // ===== HSV変換 =====
@@ -94,29 +105,29 @@
       const s=max===0?0:d/max; const v=max; return {h,s,v};
     }
 
-    // ===== 改良マッピング（UIには出さず内部のみ） =====
+    // ===== ムード判定（内部のみ使用） =====
     function hsvToMood({h,s,v}){
-      if(v < 0.20) return "reflect";                     // 暗色 → 内省
-      if(s < 0.20) return (v > 0.85 ? "fresh" : "calm"); // 低彩度 → calm / とても明るければ fresh
-      if(h < 15)  return (s>0.5 && v>0.6) ? "passion" : "vital"; // 赤
-      if(h < 45)  return (s>0.5 && v>0.6) ? "vital"   : "passion"; // 橙
-      if(h < 70)  return (s>0.4) ? "vital" : "fresh";   // 黄
-      if(h < 160) return (s>0.4) ? "calm"  : "fresh";   // 緑
-      if(h < 210) return "fresh";                       // 青緑
-      if(h < 260) return (s>0.35) ? "fresh" : "reflect";// 青〜藍
-      if(h < 300) return (s>0.35) ? "reflect" : "calm"; // 紫
-      return "reflect";                                  // 赤紫など
+      if(v < 0.20) return "reflect";
+      if(s < 0.20) return (v > 0.85 ? "fresh" : "calm");
+      if(h < 15)  return (s>0.5 && v>0.6) ? "passion" : "vital";
+      if(h < 45)  return (s>0.5 && v>0.6) ? "vital"   : "passion";
+      if(h < 70)  return (s>0.4) ? "vital" : "fresh";
+      if(h < 160) return (s>0.4) ? "calm"  : "fresh";
+      if(h < 210) return "fresh";
+      if(h < 260) return (s>0.35) ? "fresh" : "reflect";
+      if(h < 300) return (s>0.35) ? "reflect" : "calm";
+      return "reflect";
     }
 
     // ===== 状態 =====
-    const WORKER_BASE = "https://small-mode-829d.rabbitmrr.workers.dev"; // ←必要に応じて変更
+    const WORKER_BASE = "https://small-mode-829d.rabbitmrr.workers.dev";
     const ALLOW_HOSTS = ["en.wikisource.org","ja.wikisource.org","fr.wikisource.org","zh.wikisource.org","poetrydb.org","www.gutenberg.org"];
     let currentMood="fresh", showOriginal=true;
 
     function updateFromColor(hex){
       $("chip").style.background = hex;
       $("hex").textContent = hex.toUpperCase();
-      currentMood = hsvToMood(hexToHSV(hex)); // ムードは内部のみ
+      currentMood = hsvToMood(hexToHSV(hex));
     }
 
     function withTimeout(promise, ms=5000){
@@ -156,7 +167,6 @@
       $("orig").textContent = ""; $("tran").textContent = "";
       try{
         const p = await getOnlinePoem(mood, uiLang);
-        // ▼ タイトルは翻訳版を優先（なければ原題）
         $("poemTitle").textContent = (p.title_localized || p.title || "—");
         $("poemMeta").innerHTML = `${p.author} · <a href="${p.source_url}" target="_blank" class="underline">${new URL(p.source_url).host}</a>`;
         $("orig").textContent = p.original || "";
@@ -184,7 +194,7 @@
     });
     $("lang").addEventListener("click", ()=>{
       uiLang = (uiLang==="ja"?"en":"ja");
-      applyUI();
+      applyUI(); // 言語変更に合わせてホームリンクも更新されます
     });
   </script>
 </body>

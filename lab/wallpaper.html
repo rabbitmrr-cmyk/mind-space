@@ -3,58 +3,350 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title id="title">深呼吸を思い出す壁紙 — Mind Space</title>
-  <meta name="description" id="desc" content="静かな写真の壁紙。デスクトップで余白を思い出す。"/>
+  <title>壁紙スタジオ — Mind Space</title>
+  <meta name="description" content="自然の写真ギャラリーと、色から作るグラデ壁紙。名言/カレンダーのオーバーレイ、解像度指定でPNG書き出し。"/>
+
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card{border:1px solid rgba(15,23,42,.08);background:rgba(255,255,255,.72);backdrop-filter:blur(8px);border-radius:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .tab-btn{padding:.4rem .8rem;border:1px solid #e2e8f0;border-radius:9999px;font-size:.85rem}
+    .tab-btn.active{background:#fff}
+    .chip{padding:.25rem .6rem;border:1px solid #e2e8f0;border-radius:9999px;font-size:.8rem;background:#fff}
+    .chip.active{border-color:#60a5fa;background:#eff6ff}
+    .thumb{aspect-ratio:4/3;object-fit:cover;border-radius:12px;transition:transform .2s ease;content-visibility:auto}
+    .thumb:hover{transform:scale(1.01)}
+    canvas{max-width:100%;border-radius:12px;border:1px solid rgba(15,23,42,.08)}
+  </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-sky-50 via-white to-slate-50 text-slate-800">
-  <header class="mx-auto max-w-4xl px-4 py-4 flex items-center justify-between">
-    <a href="../index.html" class="text-sm hover:underline">&larr; <span id="back">ホームへ戻る</span></a>
-    <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
+  <header class="sticky top-0 z-30 backdrop-blur bg-white/40 border-b border-slate-200/40">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <a id="homeLink" class="text-sm hover:underline">&larr; ホームへ戻る</a>
+      <button id="lang" class="text-xs px-3 py-1 rounded-full border border-slate-200">English</button>
+    </div>
   </header>
 
-  <main class="mx-auto max-w-4xl px-4 pb-14">
-    <h1 class="text-2xl font-semibold" id="h1">深呼吸を思い出す壁紙</h1>
-    <p class="mt-2 text-slate-600" id="lead">静かな画像を配布します。デスクトップに設定して、ひと呼吸の合図に。</p>
+  <main class="mx-auto max-w-6xl px-4 pb-16">
+    <h1 class="text-2xl md:text-3xl font-semibold mt-6" id="h1">壁紙スタジオ</h1>
+    <p class="mt-2 text-slate-600" id="lead">静かなギャラリー + グラデ生成。名言/カレンダーをのせてPNGで書き出し。</p>
 
-    <div class="grid md:grid-cols-2 gap-6 mt-6">
-      <!-- 画像カード -->
-      <a class="block rounded-2xl overflow-hidden border bg-white/70 hover:shadow-md" href="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=90" target="_blank" rel="noopener">
-        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" class="w-full aspect-[4/3] object-cover" alt="Lake wallpaper"/>
-        <div class="p-4 text-sm">Lake — 1920px</div>
-      </a>
+    <section class="mt-4">
+      <div class="flex items-center gap-2">
+        <button class="tab-btn active" data-tab="gallery" id="tabGallery">ギャラリー</button>
+        <button class="tab-btn" data-tab="gradient" id="tabGradient">グラデ生成</button>
+      </div>
+    </section>
 
-      <a class="block rounded-2xl overflow-hidden border bg-white/70 hover:shadow-md" href="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1920&q=90" target="_blank" rel="noopener">
-        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80" class="w-full aspect-[4/3] object-cover" alt="Blue gradient wallpaper"/>
-        <div class="p-4 text-sm">Blue gradient — 1920px</div>
-      </a>
-    </div>
+    <!-- ギャラリー -->
+    <section class="card p-5 mt-4" id="panelGallery">
+      <div class="flex flex-wrap items-center gap-2 text-sm">
+        <span class="text-slate-600" id="filterLabel">カテゴリ:</span>
+        <button class="chip active" data-cat="all"   id="catAll">すべて</button>
+        <button class="chip" data-cat="sea"          id="catSea">海</button>
+        <button class="chip" data-cat="forest"       id="catForest">森</button>
+        <button class="chip" data-cat="mountain"     id="catMountain">山</button>
+        <button class="chip" data-cat="sky"          id="catSky">空・雲・夕景</button>
+        <button class="chip" data-cat="field"        id="catField">草原・花・田園</button>
+        <button class="chip" data-cat="desert"       id="catDesert">砂漠</button>
+        <button class="chip" data-cat="snow"         id="catSnow">雪景色</button>
+        <button class="chip" data-cat="river"        id="catRiver">川・湖・滝</button>
+        <button class="chip" data-cat="minimal"      id="catMinimal">ミニマル自然</button>
+      </div>
+      <p class="text-xs text-slate-500 mt-2" id="galHint">クリックでフル解像度を新規タブで開きます（出典：Unsplash）。人物や都市要素を含まない自然風景のみを掲載。</p>
 
-    <section class="mt-8 text-sm text-slate-600">
-      <h2 class="font-medium" id="how">設定方法（かんたん）</h2>
-      <ol class="list-decimal pl-5 mt-2 space-y-1" id="steps">
-        <li>画像をクリックして開く</li>
-        <li>右クリック → 画像を保存</li>
-        <li>PCやスマホの壁紙設定で選ぶ</li>
-      </ol>
+      <div class="mt-3 grid sm:grid-cols-2 md:grid-cols-3 gap-4" id="grid"></div>
+      <p class="text-xs text-slate-500 mt-3" id="credit">Photos via Unsplash — please check individual licenses.</p>
+    </section>
+
+    <!-- グラデ生成 -->
+    <section class="card p-5 mt-4 hidden" id="panelGradient">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="space-y-3">
+          <label class="text-sm flex items-center justify-between gap-2">
+            <span id="c1Label">色1</span>
+            <input type="color" id="c1" value="#5FA8FF" class="border rounded w-24 h-10 p-0">
+          </label>
+          <label class="text-sm flex items-center justify-between gap-2">
+            <span id="c2Label">色2</span>
+            <input type="color" id="c2" value="#E2E8F0" class="border rounded w-24 h-10 p-0">
+          </label>
+          <label class="text-sm flex items-center justify-between gap-2">
+            <span id="angleLabel">角度</span>
+            <input type="range" id="angle" min="0" max="360" value="25" class="w-40">
+          </label>
+          <label class="text-sm flex items-center gap-2">
+            <input type="checkbox" id="grain" class="accent-sky-600">
+            <span id="grainLabel">微細な粒子（グレイン）</span>
+          </label>
+          <label class="text-sm flex items-center gap-2">
+            <input type="checkbox" id="vignette" class="accent-sky-600" checked>
+            <span id="vigLabel">わずかな周辺減光</span>
+          </label>
+          <div class="text-sm">
+            <div class="mb-1" id="overlayHead">オーバーレイ</div>
+            <textarea id="quote" class="w-full border rounded p-2 text-sm" rows="3" placeholder="名言や一言（空なら無表示）"></textarea>
+            <div class="mt-2 flex items-center gap-2">
+              <select id="font" class="border rounded px-2 py-1 text-sm">
+                <option value="Inter">Inter</option>
+                <option value="Noto Sans JP">Noto Sans JP</option>
+                <option value="Playfair Display">Playfair Display</option>
+                <option value="serif">serif</option>
+                <option value="sans-serif">sans-serif</option>
+                <option value="monospace">monospace</option>
+              </select>
+              <input type="color" id="qColor" value="#1F2937">
+              <label class="text-xs flex items-center gap-1">
+                <input type="checkbox" id="calendar" class="accent-sky-600">
+                <span id="calLabel">月間カレンダー</span>
+              </label>
+            </div>
+          </div>
+          <div class="text-sm">
+            <div class="mb-1" id="resHead">書き出し解像度</div>
+            <select id="res" class="border rounded px-2 py-1 text-sm">
+              <option value="1920x1080">1920×1080 (FHD)</option>
+              <option value="2560x1440">2560×1440 (QHD)</option>
+              <option value="2880x1800">2880×1800 (Mac 15“)</option>
+              <option value="3840x2160">3840×2160 (4K)</option>
+              <option value="1080x1920">1080×1920 (Phone)</option>
+            </select>
+          </div>
+          <div class="pt-1 flex gap-2">
+            <button id="render" class="px-3 py-1.5 rounded border hover:bg-white">プレビュー</button>
+            <button id="download" class="px-3 py-1.5 rounded border hover:bg-white">PNGを保存</button>
+          </div>
+        </div>
+        <div class="md:col-span-2">
+          <canvas id="cv" width="1920" height="1080"></canvas>
+        </div>
+      </div>
     </section>
   </main>
 
   <script>
-    const dict={ja:{title:"深呼吸を思い出す壁紙 — Mind Space",desc:"静かな写真の壁紙。デスクトップで余白を思い出す。",
-      back:"ホームへ戻る",h1:"深呼吸を思い出す壁紙",lead:"静かな画像を配布します。デスクトップに設定して、ひと呼吸の合図に。",
-      how:"設定方法（かんたん）",steps:["画像をクリックして開く","右クリック → 画像を保存","PCやスマホの壁紙設定で選ぶ"],toggle:"English"},
-      en:{title:"Wallpaper for mindful breathing — Mind Space",desc:"Quiet wallpapers to gently remind you to pause.",
-      back:"Back to Home",h1:"Wallpaper for mindful breathing",lead:"Download quiet images and set as your desktop as a gentle pause cue.",
-      how:"How to set (quick)",steps:["Open the image","Right-click → Save image","Choose it in your device's wallpaper settings"],toggle:"日本語"}};
-    const $=id=>document.getElementById(id); let lang="ja"; if(navigator.language?.startsWith("en")) lang="en";
-    function apply(){
-      document.title=dict[lang].title; $("desc").setAttribute("content",dict[lang].desc);
-      $("back").textContent=dict[lang].back; $("h1").textContent=dict[lang].h1; $("lead").textContent=dict[lang].lead; $("how").textContent=dict[lang].how;
-      const ul=$("steps"); ul.innerHTML=""; dict[lang].steps.forEach(t=>{const li=document.createElement("li"); li.textContent=t; ul.appendChild(li);});
-      $("lang").textContent=dict[lang].toggle; document.documentElement.lang=lang;
+    /* ===== Base path & Home ===== */
+    const isGitHubPages = location.hostname.endsWith('github.io');
+    const BASE = isGitHubPages ? '/mind-space' : '';
+    document.getElementById('homeLink').href = BASE + '/';
+
+    /* ===== i18n ===== */
+    const dict={
+      ja:{h1:"壁紙スタジオ",lead:"静かなギャラリー + グラデ生成。名言/カレンダーをのせてPNGで書き出し。",tabGallery:"ギャラリー",tabGradient:"グラデ生成",galHint:"クリックでフル解像度を新規タブで開きます（出典：Unsplash）。人物や都市要素を含まない自然風景のみを掲載。",credit:"Photos via Unsplash — please check individual licenses.",c1:"色1",c2:"色2",angle:"角度",grain:"微細な粒子（グレイン）",vignette:"わずかな周辺減光",overlay:"オーバーレイ",cal:"月間カレンダー",res:"書き出し解像度",preview:"プレビュー",download:"PNGを保存",filterLabel:"カテゴリ:",all:"すべて",sea:"海",forest:"森",mountain:"山",sky:"空・雲・夕景",field:"草原・花・田園",desert:"砂漠",snow:"雪景色",river:"川・湖・滝",minimal:"ミニマル自然"},
+      en:{h1:"Wallpaper Studio",lead:"Quiet gallery + gradient maker. Add quotes/calendar and export as PNG.",tabGallery:"Gallery",tabGradient:"Gradient",galHint:"Click to open full resolution in a new tab (via Unsplash). Nature-only with no people or urban elements.",credit:"Photos via Unsplash — please check individual licenses.",c1:"Color 1",c2:"Color 2",angle:"Angle",grain:"Grain (subtle)",vignette:"Light vignette",overlay:"Overlay",cal:"Monthly calendar",res:"Export size",preview:"Preview",download:"Save PNG",filterLabel:"Category:",all:"All",sea:"Sea",forest:"Forest",mountain:"Mountain",sky:"Sky & Sunset",field:"Field & Flowers",desert:"Desert",snow:"Snow",river:"River & Waterfall",minimal:"Minimal nature"}
+    };
+    const $=id=>document.getElementById(id);
+    let ui = navigator.language?.startsWith('en')?'en':'ja';
+    function applyUI(){
+      $('h1').textContent=dict[ui].h1; $('lead').textContent=dict[ui].lead;
+      $('tabGallery').textContent=dict[ui].tabGallery; $('tabGradient').textContent=dict[ui].tabGradient;
+      $('galHint').textContent=dict[ui].galHint; $('credit').textContent=dict[ui].credit;
+      $('c1Label').textContent=dict[ui].c1; $('c2Label').textContent=dict[ui].c2; $('angleLabel').textContent=dict[ui].angle;
+      $('grainLabel').textContent=dict[ui].grain; $('vigLabel').textContent=dict[ui].vignette;
+      $('overlayHead').textContent=dict[ui].overlay; $('calLabel').textContent=dict[ui].cal;
+      $('resHead').textContent=dict[ui].res; $('render').textContent=dict[ui].preview; $('download').textContent=dict[ui].download;
+      $('lang').textContent=(ui==='ja'?'English':'日本語'); document.documentElement.lang=ui;
+      $('filterLabel').textContent = dict[ui].filterLabel;
+      document.querySelector('[data-cat="all"]').textContent=dict[ui].all;
+      document.querySelector('[data-cat="sea"]').textContent=dict[ui].sea;
+      document.querySelector('[data-cat="forest"]').textContent=dict[ui].forest;
+      document.querySelector('[data-cat="mountain"]').textContent=dict[ui].mountain;
+      document.querySelector('[data-cat="sky"]').textContent=dict[ui].sky;
+      document.querySelector('[data-cat="field"]').textContent=dict[ui].field;
+      document.querySelector('[data-cat="desert"]').textContent=dict[ui].desert;
+      document.querySelector('[data-cat="snow"]').textContent=dict[ui].snow;
+      document.querySelector('[data-cat="river"]').textContent=dict[ui].river;
+      document.querySelector('[data-cat="minimal"]').textContent=dict[ui].minimal;
     }
-    apply(); $("lang").addEventListener("click",()=>{lang=lang==="ja"?"en":"ja";apply();});
+    $('lang').addEventListener('click', ()=>{ ui=(ui==='ja'?'en':'ja'); applyUI(); });
+    applyUI();
+
+    /* ===== ブロックリスト（人・404・テイスト不一致も完全除外） ===== */
+    const BLOCK = new Set([
+      // 以前のブロック
+      "https://images.unsplash.com/photo-1500048993953-d23a436266cf",
+      "https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d",
+      "https://images.unsplash.com/photo-1489587021151-3e4dfca41f37",
+      "https://images.unsplash.com/photo-1501781459761-0ae7c9a1a4a5",
+      "https://images.unsplash.com/photo-1506818144585-74b29c980d4b",
+      "https://images.unsplash.com/photo-1491553895911-0055eca6402d",
+      // 今回ご指摘の404
+      "https://images.unsplash.com/photo-1520975922215-2208d662ec30",
+      "https://images.unsplash.com/photo-1517495306984-937f06a4b162",
+      "https://images.unsplash.com/photo-1500049637043-8e50f1b9c9a0",
+      // テイスト不一致
+      "https://images.unsplash.com/photo-1502920917128-1aa500764cbd"
+    ]);
+
+    /* ===== ギャラリー（自然のみ／重複ID排除） ===== */
+    const base = "https://images.unsplash.com/";
+    const photos = [
+      // [category, title, id]  ※ご指摘のIDは配列からも削除済み
+      ["sea","Ocean wave","photo-1507525428034-b723cf961d3e"],
+      ["sea","Sea horizon","photo-1504609773096-104ff2c73ba4"],
+
+      ["forest","Mossy forest","photo-1469474968028-56623f02e42e"],
+      ["forest","Pine woodland","photo-1503435824048-a799a3a84bf7"],
+      ["forest","Birch path","photo-1470770903676-69b98201ea1c"],
+
+      ["mountain","Alpine ridge","photo-1464822759023-fed622ff2c3b"],
+      ["mountain","Distant range","photo-1455218873509-8097305ee378"],
+      ["mountain","Morning peaks","photo-1501785888041-af3ef285b470"],
+
+      ["sky","Pastel dusk","photo-1499346030926-9a72daac6c63"],
+
+      ["field","Golden field","photo-1500530855697-b586d89ba3ee"],
+      ["field","Lavender rows","photo-1442410519123-a33d5dc262b1"],
+      ["field","Meadow calm","photo-1519681393784-d120267933ba"],
+
+      ["desert","Quiet dunes","photo-1549880338-65ddcdfd017b"],
+
+      ["snow","Frozen pine","photo-1482192596544-9eb780fc7f66"],
+
+      ["river","Quiet river","photo-1441974231531-c6227db76b6e"],
+      ["river","Mountain lake","photo-1506744038136-46273834b3fb"],
+      ["river","Waterfall veil","photo-1482192505345-5655af888cc4"],
+
+      ["minimal","Mist & hill","photo-1441974231531-c6227db76b6e"]
+    ];
+
+    function fullURL(id, w=4096, q=90){ return `${base}${id}?auto=format&fm=jpg&w=${w}&q=${q}`; }
+    function thumbURL(id){ return fullURL(id, 600, 60); }
+
+    function filteredList(cat="all"){
+      const seen = new Set(); const out=[];
+      for(const [c,title,id] of photos){
+        const big = `${base}${id}`;
+        if(BLOCK.has(big)) continue;
+        if(cat!=="all" && c!==cat) continue;
+        if(seen.has(id)) continue;
+        seen.add(id); out.push([c,title,id]);
+      }
+      return out;
+    }
+
+    const io = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const img=e.target; const src=img.dataset.src;
+          if(src){ img.src=src; img.removeAttribute('data-src'); }
+          io.unobserve(img);
+        }
+      });
+    }, {rootMargin:'200px'}) : null;
+
+    function buildGrid(cat="all"){
+      const g=$('grid'); g.innerHTML='';
+      const list = filteredList(cat);
+      for(const [c,title,id] of list){
+        const a=document.createElement('a');
+        a.href = fullURL(id); a.target='_blank'; a.rel='noopener';
+        a.className='group block overflow-hidden rounded-2xl border border-slate-200 bg-white';
+
+        const img=document.createElement('img');
+        img.alt=title; img.className='thumb w-full';
+        img.loading='lazy'; img.decoding='async';
+        img.setAttribute('data-src', thumbURL(id));
+        img.setAttribute('sizes','(min-width: 768px) 33vw, 50vw');
+        img.setAttribute('srcset', [
+          `${fullURL(id, 400, 60)} 400w`,
+          `${fullURL(id, 600, 60)} 600w`,
+          `${fullURL(id, 900, 60)} 900w`
+        ].join(', '));
+        // フェイルセーフ：404等は自動で除去
+        img.addEventListener('error', ()=>{ a.remove(); });
+
+        a.appendChild(img);
+        g.appendChild(a);
+        if(io) io.observe(img); else img.src = thumbURL(id);
+      }
+    }
+    buildGrid();
+
+    document.querySelectorAll('[data-cat]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('[data-cat]').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        buildGrid(btn.dataset.cat);
+      });
+    });
+
+    const tabs=document.querySelectorAll('.tab-btn');
+    tabs.forEach(btn=>btn.addEventListener('click',()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const t=btn.dataset.tab;
+      $('panelGallery').classList.toggle('hidden', t!=='gallery');
+      $('panelGradient').classList.toggle('hidden', t!=='gradient');
+    }));
+
+    /* ===== Gradient Renderer (Canvas) ===== */
+    const cv=$('cv'), ctx=cv.getContext('2d');
+    function parseRes(s){ const [w,h]=s.split('x').map(n=>+n); return {w,h}; }
+    function draw(){
+      const {w,h}=parseRes($('res').value);
+      cv.width=w; cv.height=h;
+      const ang= (+$('angle').value) * Math.PI/180;
+      const cx=w/2, cy=h/2;
+      const r = Math.sqrt(w*w + h*h)/2;
+      const x1 = cx + Math.cos(ang+Math.PI)*r, y1 = cy + Math.sin(ang+Math.PI)*r;
+      const x2 = cx + Math.cos(ang)*r,        y2 = cy + Math.sin(ang)*r;
+      const g = ctx.createLinearGradient(x1,y1,x2,y2);
+      g.addColorStop(0, $('c1').value); g.addColorStop(1, $('c2').value);
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+
+      if($('vignette').checked){
+        const vg = ctx.createRadialGradient(cx,cy,Math.min(w,h)/4, cx,cy,Math.max(w,h)/1.1);
+        vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.18)');
+        ctx.fillStyle=vg; ctx.fillRect(0,0,w,h);
+      }
+      if($('grain').checked){
+        const imgData = ctx.getImageData(0,0,w,h);
+        const d=imgData.data;
+        for(let i=0;i<d.length;i+=4){
+          const n = (Math.random()*20-10);
+          d[i]+=n; d[i+1]+=n; d[i+2]+=n;
+        }
+        ctx.putImageData(imgData,0,0);
+      }
+      const q = $('quote').value.trim();
+      if(q){
+        ctx.font = `48px "${$('font').value}"`;
+        ctx.fillStyle = $('qColor').value;
+        ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+        const pad = Math.floor(Math.min(w,h)*0.06);
+        const maxW = w - pad*2;
+        const lines = wrapText(q, maxW, ctx);
+        let y = h - pad - (lines.length-1)*56;
+        lines.forEach(line=>{ ctx.fillText(line, pad, y); y+=56; });
+      }
+      if($('calendar').checked){ drawCalendar(ctx, w, h); }
+    }
+    function wrapText(text, maxWidth, context){
+      const words = text.split(/\s+/); const lines=[]; let line='';
+      for(const word of words){
+        const test = line ? line+' '+word : word;
+        if(context.measureText(test).width > maxWidth){ if(line) lines.push(line); line=word; }
+        else { line=test; }
+      }
+      if(line) lines.push(line); return lines;
+    }
+    function drawCalendar(ctx, w, h){
+      const now = new Date(); const y=now.getFullYear(), m=now.getMonth();
+      const first=new Date(y,m,1).getDay(); const lastDay=new Date(y,m+1,0).getDate();
+      const pad=Math.floor(Math.min(w,h)*0.06); const calW = Math.min(600, w*0.45);
+      const cellW = calW/7, cellH=38; const x0 = w - pad - calW; const y0 = pad + 60;
+      ctx.fillStyle='rgba(255,255,255,0.65)'; ctx.fillRect(x0-10,y0-54,calW+20, cellH*7+80);
+      ctx.fillStyle='#0f172a'; ctx.font='bold 28px Inter'; ctx.fillText(`${y}/${String(m+1).padStart(2,'0')}`, x0, y0-20);
+      ctx.font='14px Inter'; const wd = ['S','M','T','W','T','F','S']; wd.forEach((wday,i)=>{ ctx.fillText(wday, x0+i*cellW+8, y0); });
+      let d=1, row=1; while(d<=lastDay){ for(let col=0; col<7 && d<=lastDay; col++){ if(row>1 || col>=first){ ctx.fillText(String(d), x0+col*cellW+8, y0+row*cellH); d++; } } row++; }
+    }
+    $('render').addEventListener('click', draw);
+    $('download').addEventListener('click', ()=>{ draw(); const a=document.createElement('a'); a.download='wallpaper.png'; a.href=$('cv').toDataURL('image/png'); a.click(); });
+    ['c1','c2','angle','grain','vignette','quote','font','qColor','calendar','res'].forEach(id=>{ $(id).addEventListener('input', draw); });
+    draw();
   </script>
 </body>
 </html>
